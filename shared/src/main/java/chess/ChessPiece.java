@@ -67,6 +67,9 @@ public class ChessPiece {
             case PieceType.KING:
                 possibleMoves = populateMovesKing(board, myPosition);
                 break;
+            case PieceType.KNIGHT:
+                possibleMoves = populateMovesKnight(board, myPosition);
+                break;
             default:
                 possibleMoves = new ArrayList<ChessMove>();
                 break;
@@ -94,6 +97,19 @@ public class ChessPiece {
         king_patterns[6] = new ChessMovePatterns(-1, 0, true, false);
         king_patterns[7] = new ChessMovePatterns(0, -1, true, false);
         return populateSimpleMoves(board, myPosition, king_patterns);
+    }
+
+    public Collection<ChessMove> populateMovesKnight(ChessBoard board, ChessPosition myPosition) {
+        ChessMovePatterns[] knight_patterns = new ChessMovePatterns[8];
+        knight_patterns[0] = new ChessMovePatterns(1, 2, true, false);
+        knight_patterns[1] = new ChessMovePatterns(2, 1, true, false);
+        knight_patterns[2] = new ChessMovePatterns(-1, 2, true, false);
+        knight_patterns[3] = new ChessMovePatterns(-2, 1, true, false);
+        knight_patterns[4] = new ChessMovePatterns(1, -2, true, false);
+        knight_patterns[5] = new ChessMovePatterns(2, -1, true, false);
+        knight_patterns[6] = new ChessMovePatterns(-1, -2, true, false);
+        knight_patterns[7] = new ChessMovePatterns(-2, -1, true, false);
+        return populateSimpleMoves(board, myPosition, knight_patterns);
     }
 
     public Collection<ChessMove> populateSimpleMoves(ChessBoard board, ChessPosition myPosition, ChessMovePatterns[] movePatterns) {
