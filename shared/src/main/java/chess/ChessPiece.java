@@ -70,6 +70,9 @@ public class ChessPiece {
             case PieceType.KNIGHT:
                 possibleMoves = populateMovesKnight(board, myPosition);
                 break;
+            case PieceType.PAWN:
+                possibleMoves = populateMovesPawn(board, myPosition);
+                break;
             default:
                 possibleMoves = new ArrayList<ChessMove>();
                 break;
@@ -110,6 +113,43 @@ public class ChessPiece {
         knight_patterns[6] = new ChessMovePatterns(-1, -2, true, false);
         knight_patterns[7] = new ChessMovePatterns(-2, -1, true, false);
         return populateSimpleMoves(board, myPosition, knight_patterns);
+    }
+
+    public Collection<ChessMove> populateMovesPawn(ChessBoard board, ChessPosition myPosition) {
+        ChessMovePatterns[] pawn_patterns = new ChessMovePatterns[3];
+        pawn_patterns[0] = new ChessMovePatterns(1, 0, false, false);
+        pawn_patterns[1] = new ChessMovePatterns(1, 1, true, false, true);
+        pawn_patterns[2] = new ChessMovePatterns(1, -1, true, false, true);
+
+        Collection<ChessMove> simpleMoves = populateSimpleMoves(board, myPosition, pawn_patterns);
+
+        // Nonstandard moves
+        int promotionRow = (this.teamColor == ChessGame.TeamColor.WHITE) ? 8 : 1;
+        Collection<ChessMove> possibleMoves = new ArrayList<ChessMove>();
+        for (ChessMove move : simpleMoves) {
+            if (move.getEndPosition().getRow() == promotionRow) {
+                possibleMoves.add(new ChessMove(move, PieceType.ROOK));
+                possibleMoves.add(new ChessMove(move, PieceType.BISHOP));
+                possibleMoves.add(new ChessMove(move, PieceType.KNIGHT));
+                possibleMoves.add(new ChessMove(move, PieceType.QUEEN));
+            } else {
+                possibleMoves.add(move);
+            }
+        }
+        int home_row = (this.teamColor == ChessGame.TeamColor.WHITE) ? 2 : 7;
+        int row_multiplier = (this.teamColor == ChessGame.TeamColor.WHITE) ? 1 : -1;
+        if (myPosition.getRow() == home_row) {
+            ChessPiece ahead_1 = board.getPiece(new ChessPosition(myPosition.getRow() + row_multiplier,
+                    myPosition.getColumn()));
+            ChessPosition ahead_2_square = new ChessPosition(myPosition.getRow() + 2 * row_multiplier,
+                    myPosition.getColumn());
+            ChessPiece ahead_2 = board.getPiece(ahead_2_square);
+            if (ahead_1 == null && ahead_2 == null) {
+                possibleMoves.add(new ChessMove(myPosition, ahead_2_square, null));
+            }
+        }
+
+        return possibleMoves;
     }
 
     public Collection<ChessMove> populateSimpleMoves(ChessBoard board, ChessPosition myPosition, ChessMovePatterns[] movePatterns) {

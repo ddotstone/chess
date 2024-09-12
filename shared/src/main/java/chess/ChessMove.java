@@ -19,6 +19,10 @@ public class ChessMove extends Object {
         this.promotionPiece = promotionPiece;
     }
 
+    public ChessMove(ChessMove copy, ChessPiece.PieceType promotionPiece) {
+        this(copy.startPosition, copy.endPosition, promotionPiece);
+    }
+
     /**
      * @return ChessPosition of starting location
      */
