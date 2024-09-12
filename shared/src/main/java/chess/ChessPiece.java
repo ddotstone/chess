@@ -76,6 +76,9 @@ public class ChessPiece {
             case PieceType.QUEEN:
                 possibleMoves = populateMovesQueen(board, myPosition);
                 break;
+            case PieceType.ROOK:
+                possibleMoves = populateMovesRook(board, myPosition);
+                break;
             default:
                 possibleMoves = new ArrayList<ChessMove>();
                 break;
@@ -156,16 +159,25 @@ public class ChessPiece {
     }
 
     public Collection<ChessMove> populateMovesQueen(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] king_patterns = new ChessMovePatterns[8];
-        king_patterns[0] = new ChessMovePatterns(1, 1, true, true);
-        king_patterns[1] = new ChessMovePatterns(1, 0, true, true);
-        king_patterns[2] = new ChessMovePatterns(0, 1, true, true);
-        king_patterns[3] = new ChessMovePatterns(1, -1, true, true);
-        king_patterns[4] = new ChessMovePatterns(-1, 1, true, true);
-        king_patterns[5] = new ChessMovePatterns(-1, -1, true, true);
-        king_patterns[6] = new ChessMovePatterns(-1, 0, true, true);
-        king_patterns[7] = new ChessMovePatterns(0, -1, true, true);
-        return populateSimpleMoves(board, myPosition, king_patterns);
+        ChessMovePatterns[] queen_patterns = new ChessMovePatterns[8];
+        queen_patterns[0] = new ChessMovePatterns(1, 1, true, true);
+        queen_patterns[1] = new ChessMovePatterns(1, 0, true, true);
+        queen_patterns[2] = new ChessMovePatterns(0, 1, true, true);
+        queen_patterns[3] = new ChessMovePatterns(1, -1, true, true);
+        queen_patterns[4] = new ChessMovePatterns(-1, 1, true, true);
+        queen_patterns[5] = new ChessMovePatterns(-1, -1, true, true);
+        queen_patterns[6] = new ChessMovePatterns(-1, 0, true, true);
+        queen_patterns[7] = new ChessMovePatterns(0, -1, true, true);
+        return populateSimpleMoves(board, myPosition, queen_patterns);
+    }
+
+    public Collection<ChessMove> populateMovesRook(ChessBoard board, ChessPosition myPosition) {
+        ChessMovePatterns[] rook_patterns = new ChessMovePatterns[4];
+        rook_patterns[0] = new ChessMovePatterns(1, 0, true, true);
+        rook_patterns[1] = new ChessMovePatterns(0, 1, true, true);
+        rook_patterns[2] = new ChessMovePatterns(-1, 0, true, true);
+        rook_patterns[3] = new ChessMovePatterns(0, -1, true, true);
+        return populateSimpleMoves(board, myPosition, rook_patterns);
     }
 
     public Collection<ChessMove> populateSimpleMoves(ChessBoard board, ChessPosition myPosition, ChessMovePatterns[] movePatterns) {

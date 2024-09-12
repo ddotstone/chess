@@ -45,6 +45,28 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        for (int row = 0; row < board.length; row++) {
+            if (row == 0 || row == 7) {
+                ChessGame.TeamColor teamColor = (row == 0) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                board[row][0] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+                board[row][1] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+                board[row][2] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+                board[row][3] = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
+                board[row][4] = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
+                board[row][5] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+                board[row][6] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+                board[row][7] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+            } else if ((row == 1) || (row == 6)) {
+                ChessGame.TeamColor teamColor = (row == 1) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                for (ChessPiece space : board[row]) {
+                    space = new ChessPiece(teamColor, ChessPiece.PieceType.PAWN);
+                }
+            } else {
+                for (ChessPiece space : board[row]) {
+                    space = null;
+                }
+            }
+
+        }
     }
 }
