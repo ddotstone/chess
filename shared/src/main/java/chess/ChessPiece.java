@@ -189,8 +189,8 @@ public class ChessPiece {
             int curr_col = myPosition.getColumn();
             ChessPiece pieceInSquare;
             do {
-                curr_row += color_multiplier * movePattern.row_diff;
-                curr_col += color_multiplier * movePattern.col_diff;
+                curr_row += color_multiplier * movePattern.row_diff();
+                curr_col += color_multiplier * movePattern.col_diff();
 
                 if (curr_row > ChessBoard.N_ROWS || curr_col > ChessBoard.N_COLS) {
                     break;
@@ -203,14 +203,14 @@ public class ChessPiece {
                 if (pieceInSquare != null) {
                     if ((pieceInSquare.teamColor != this.teamColor) &&
                             (pieceInSquare.pieceType != PieceType.KING) &&
-                            movePattern.canTake) {
+                            movePattern.canTake()) {
                         all_moves.add(new ChessMove(myPosition, dest, null));
                     }
-                } else if (!movePattern.needTakeToMove) {
+                } else if (!movePattern.needTakeToMove()) {
                     all_moves.add(new ChessMove(myPosition, dest, null));
                 }
 
-            } while (movePattern.canRepeat && (board.getPiece(new ChessPosition(curr_row, curr_col))) == null);
+            } while (movePattern.canRepeat() && (board.getPiece(new ChessPosition(curr_row, curr_col))) == null);
         }
         return all_moves;
     }
