@@ -61,7 +61,7 @@ public class ChessMove extends Object {
         ChessMove that = (ChessMove) obj;
         return ((that.startPosition.equals(this.startPosition)) &&
                 (that.endPosition.equals(this.endPosition)) &&
-                (this.promotionPiece == promotionPiece));
+                (this.promotionPiece == null ? that.promotionPiece == null : this.promotionPiece.equals(that.promotionPiece)));
     }
 
     @Override

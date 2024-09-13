@@ -16,6 +16,33 @@ public class ChessBoard {
         board = new ChessPiece[N_ROWS][N_COLS];
     }
 
+    @Override
+    public int hashCode() {
+        int hash_code = 0;
+        for (int row = 0; row < N_ROWS; row++) {
+            for (int col = 0; col < N_COLS; col++) {
+                int hash_piece = this.board[row][col] == null ? 0 : this.board[row][col].hashCode();
+                hash_code += hash_piece;
+            }
+        }
+        return 71 * hash_code;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || this.getClass() != obj.getClass()) return false;
+        ChessBoard that = (ChessBoard) obj;
+        for (int row = 0; row < N_ROWS; row++) {
+            for (int col = 0; col < N_COLS; col++) {
+                boolean is_equal = this.board[row][col] == null ?
+                        that.board[row][col] == null :
+                        this.board[row][col].equals(that.board[row][col]);
+            }
+        }
+        return true;
+    }
+
     /**
      * Adds a chess piece to the chessboard
      *
@@ -68,5 +95,20 @@ public class ChessBoard {
             }
 
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder string_board = new StringBuilder();
+        for (int row = 0; row < N_ROWS; row++) {
+            string_board.append('|');
+            for (int col = 0; col < N_COLS; col++) {
+                String piece = (this.board[row][col] == null) ? " " : this.board[row][col].toString();
+                string_board.append(piece);
+                string_board.append('|');
+            }
+            string_board.append("\n");
+        }
+        return string_board.toString();
     }
 }
