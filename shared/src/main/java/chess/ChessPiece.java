@@ -34,7 +34,7 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return "ChessPiece{" + teamColor.toString() + ", " + pieceType.toString() + '}';
+        return "ChessPiece{ COLOR:" + teamColor.toString() + ", TYPE:" + pieceType.toString() + '}';
     }
 
     /**

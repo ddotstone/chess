@@ -67,7 +67,7 @@ public class ChessMove extends Object {
     @Override
     public String toString() {
         String promotionPieceString = (this.promotionPiece == null) ? "" : promotionPiece.toString();
-        return ("ChessMove{" + startPosition.toString() + ", " + endPosition.toString() + ", " + promotionPieceString + "}");
+        return ("ChessMove{ START:" + startPosition.toString() + ", END:" + endPosition.toString() + ", PROMOTION:" + promotionPieceString + "}");
     }
 
 
