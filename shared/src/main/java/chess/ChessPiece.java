@@ -86,6 +86,13 @@ public class ChessPiece {
         return possibleMoves;
     }
 
+    /**
+     * finds all moves for a bishop
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesBishop(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] bishop_patterns = new ChessMovePatterns[4];
         bishop_patterns[0] = new ChessMovePatterns(1, 1, true, true);
@@ -95,6 +102,13 @@ public class ChessPiece {
         return populateSimpleMoves(board, myPosition, bishop_patterns);
     }
 
+    /**
+     * Finds all moves for a King
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesKing(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] king_patterns = new ChessMovePatterns[8];
         king_patterns[0] = new ChessMovePatterns(1, 1, true, false);
@@ -108,6 +122,13 @@ public class ChessPiece {
         return populateSimpleMoves(board, myPosition, king_patterns);
     }
 
+    /**
+     * Finds all moves for a Knight
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesKnight(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] knight_patterns = new ChessMovePatterns[8];
         knight_patterns[0] = new ChessMovePatterns(1, 2, true, false);
@@ -121,6 +142,13 @@ public class ChessPiece {
         return populateSimpleMoves(board, myPosition, knight_patterns);
     }
 
+    /**
+     * Finds all moves for Pawns
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesPawn(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] pawn_patterns = new ChessMovePatterns[3];
         pawn_patterns[0] = new ChessMovePatterns(1, 0, false, false);
@@ -158,6 +186,13 @@ public class ChessPiece {
         return possibleMoves;
     }
 
+    /**
+     * Finds all possible moves for a queen
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesQueen(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] queen_patterns = new ChessMovePatterns[8];
         queen_patterns[0] = new ChessMovePatterns(1, 1, true, true);
@@ -171,6 +206,13 @@ public class ChessPiece {
         return populateSimpleMoves(board, myPosition, queen_patterns);
     }
 
+    /**
+     * Finds all possible moves for a rook
+     *
+     * @param board      current board find simple moves from
+     * @param myPosition position on board piece is located
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateMovesRook(ChessBoard board, ChessPosition myPosition) {
         ChessMovePatterns[] rook_patterns = new ChessMovePatterns[4];
         rook_patterns[0] = new ChessMovePatterns(1, 0, true, true);
@@ -180,6 +222,14 @@ public class ChessPiece {
         return populateSimpleMoves(board, myPosition, rook_patterns);
     }
 
+    /**
+     * Finds all moves for a colleciton of Move Patterns
+     *
+     * @param board        current board find simple moves from
+     * @param myPosition   position on board piece is located
+     * @param movePatterns an array of possible simple move patters to test
+     * @return a collection of possible ChessMoves
+     */
     public Collection<ChessMove> populateSimpleMoves(ChessBoard board, ChessPosition myPosition, ChessMovePatterns[] movePatterns) {
         int color_multiplier = (this.teamColor == ChessGame.TeamColor.BLACK) ? -1 : 1;
 
