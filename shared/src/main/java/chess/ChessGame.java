@@ -9,9 +9,10 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
+    private ChessBoard board;
 
     public ChessGame() {
-
+        board = new ChessBoard();
     }
 
     /**
@@ -28,14 +29,6 @@ public class ChessGame {
      */
     public void setTeamTurn(TeamColor team) {
         throw new RuntimeException("Not implemented");
-    }
-
-    /**
-     * Enum identifying the 2 possible teams in a chess game
-     */
-    public enum TeamColor {
-        WHITE,
-        BLACK
     }
 
     /**
@@ -56,7 +49,12 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        ChessPiece currPiece = board.getPiece(move.getStartPosition());
+        if (move.getPromotionPiece() != null) {
+            currPiece = new ChessPiece(currPiece.getTeamColor(), move.getPromotionPiece());
+        }
+        board.addPiece(move.getStartPosition(), null);
+        board.addPiece(move.getEndPosition(), currPiece);
     }
 
     /**
@@ -91,6 +89,15 @@ public class ChessGame {
     }
 
     /**
+     * Gets the current chessboard
+     *
+     * @return the chessboard
+     */
+    public ChessBoard getBoard() {
+        throw new RuntimeException("Not implemented");
+    }
+
+    /**
      * Sets this game's chessboard with a given board
      *
      * @param board the new board to use
@@ -100,11 +107,10 @@ public class ChessGame {
     }
 
     /**
-     * Gets the current chessboard
-     *
-     * @return the chessboard
+     * Enum identifying the 2 possible teams in a chess game
      */
-    public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+    public enum TeamColor {
+        WHITE,
+        BLACK
     }
 }
