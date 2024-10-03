@@ -16,6 +16,14 @@ public class ChessBoard {
         board = new ChessPiece[N_ROWS][N_COLS];
     }
 
+    public ChessBoard(ChessBoard copy) {
+        this.board = new ChessPiece[N_ROWS][];
+        for (int row = 0; row < N_ROWS; row++) {
+            ChessPiece[] currRow = copy.board[row];
+            System.arraycopy(currRow, 0, this.board[row], 0, N_COLS);
+        }
+    }
+
     @Override
     public int hashCode() {
         int hash_code = 0;
