@@ -73,37 +73,51 @@ public class ChessBoard {
      */
     public void resetBoard() {
         for (int row = 0; row < board.length; row++) {
-            if (row == 0 || row == 7) {
-                ChessGame.TeamColor teamColor = (row == 0) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
-                board[row][0] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
-                board[row][1] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
-                board[row][2] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
-                board[row][3] = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
-                board[row][4] = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
-                board[row][5] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
-                board[row][6] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
-                board[row][7] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
-            } else if ((row == 1) || (row == 6)) {
-                ChessGame.TeamColor teamColor = (row == 1) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
-                for (ChessPiece space : board[row]) {
-                    space = new ChessPiece(teamColor, ChessPiece.PieceType.PAWN);
-                }
-            } else {
-                for (ChessPiece space : board[row]) {
-                    space = null;
+            for (int col = 0; col < board.length; col++) {
+                if (row == 0 || row == 7) {
+                    ChessGame.TeamColor teamColor = (row == 0) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                    board[row][0] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+                    board[row][1] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+                    board[row][2] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+                    board[row][3] = new ChessPiece(teamColor, ChessPiece.PieceType.QUEEN);
+                    board[row][4] = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
+                    board[row][5] = new ChessPiece(teamColor, ChessPiece.PieceType.BISHOP);
+                    board[row][6] = new ChessPiece(teamColor, ChessPiece.PieceType.KNIGHT);
+                    board[row][7] = new ChessPiece(teamColor, ChessPiece.PieceType.ROOK);
+                    break;
+                } else if (row == 1 || row == 6) {
+                    ChessGame.TeamColor teamColor = (row == 1) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+                    board[row][col] = new ChessPiece(teamColor, ChessPiece.PieceType.PAWN);
+                } else {
+                    board[row][col] = null;
                 }
             }
-
         }
     }
 
     @Override
     public String toString() {
         StringBuilder string_board = new StringBuilder();
-        for (int row = 0; row < N_ROWS; row++) {
+        for (int row = N_ROWS - 1; row >= 0; row--) {
             string_board.append('|');
             for (int col = 0; col < N_COLS; col++) {
-                String piece = (this.board[row][col] == null) ? " " : this.board[row][col].toString();
+                String piece;
+                if (this.board[row][col] == null) {
+                    piece = " ";
+                } else {
+                    if (this.board[row][col].getPieceType() == ChessPiece.PieceType.KNIGHT) {
+                        piece = "n";
+
+                    } else {
+                        piece = this.board[row][col].getPieceType().toString().substring(0, 1);
+                    }
+
+                    if (this.board[row][col].getTeamColor() == ChessGame.TeamColor.WHITE) {
+                        piece = piece.toUpperCase();
+                    } else {
+                        piece = piece.toLowerCase();
+                    }
+                }
                 string_board.append(piece);
                 string_board.append('|');
             }
