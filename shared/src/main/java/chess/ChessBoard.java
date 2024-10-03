@@ -17,10 +17,12 @@ public class ChessBoard {
     }
 
     public ChessBoard(ChessBoard copy) {
+        if (copy.board == null) {
+            this.board = null;
+        }
         this.board = new ChessPiece[N_ROWS][];
         for (int row = 0; row < N_ROWS; row++) {
-            ChessPiece[] currRow = copy.board[row];
-            System.arraycopy(currRow, 0, this.board[row], 0, N_COLS);
+            this.board[row] = copy.board[row].clone();
         }
     }
 

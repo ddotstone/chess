@@ -441,7 +441,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        board = new ChessBoard(board);
+        this.board = new ChessBoard(board);
     }
 
     /**
