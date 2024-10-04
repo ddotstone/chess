@@ -468,6 +468,12 @@ public class ChessGame {
         this.board = new ChessBoard(board);
     }
 
+    @Override
+    public String toString() {
+        String print = String.format("    %s    \n%s\n", teamTurn.toString(), board.toString());
+        return print;
+    }
+
     /**
      * Enum identifying the 2 possible teams in a chess game
      */
