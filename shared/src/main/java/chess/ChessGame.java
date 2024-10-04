@@ -122,9 +122,11 @@ public class ChessGame {
 
         int row = kingPosition.getRow();
         int col = kingPosition.getColumn();
+        int iterations = 0;
         do {
             row += colorMultiplier;
             col++;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 (board.getPiece(new ChessPosition(row, col)) == null));
 
@@ -133,7 +135,7 @@ public class ChessGame {
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.PAWN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.BISHOP) {
@@ -144,10 +146,12 @@ public class ChessGame {
 
         row = kingPosition.getRow();
         col = kingPosition.getColumn();
+        iterations = 0;
 
         do {
             row += colorMultiplier;
             col--;
+            iterations++;
         }
         while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
@@ -155,7 +159,7 @@ public class ChessGame {
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.PAWN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.BISHOP) {
@@ -166,16 +170,18 @@ public class ChessGame {
 
         row = kingPosition.getRow();
         col = kingPosition.getColumn();
+        iterations = 0;
         do {
             row -= colorMultiplier;
             col++;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.BISHOP) {
                     return true;
@@ -184,16 +190,18 @@ public class ChessGame {
         }
         row = kingPosition.getRow();
         col = kingPosition.getColumn();
+        iterations = 0;
         do {
             row -= colorMultiplier;
             col--;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.BISHOP) {
                     return true;
@@ -202,16 +210,18 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
+        iterations = 0;
         do {
             row += colorMultiplier;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
                     return true;
@@ -220,16 +230,18 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
+        iterations = 0;
         do {
             row -= colorMultiplier;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
                     return true;
@@ -238,16 +250,18 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
+        iterations = 0;
         do {
             col += 1;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
                     return true;
@@ -256,16 +270,18 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
+        iterations = 0;
         do {
             col -= 1;
+            iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 board.getPiece(new ChessPosition(row, col)) == null);
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != teamColor) {
-                if (endPiece.getPieceType() == ChessPiece.PieceType.KING ||
+                if ((iterations == 1 && endPiece.getPieceType() == ChessPiece.PieceType.KING) ||
                         endPiece.getPieceType() == ChessPiece.PieceType.QUEEN ||
                         endPiece.getPieceType() == ChessPiece.PieceType.ROOK) {
                     return true;
@@ -273,7 +289,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row += 2;
         col += 1;
@@ -286,7 +302,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row += 1;
         col += 2;
@@ -299,7 +315,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row -= 2;
         col += 1;
@@ -312,7 +328,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row -= 1;
         col += 2;
@@ -325,7 +341,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row += 2;
         col -= 1;
@@ -338,7 +354,7 @@ public class ChessGame {
             }
         }
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row += 1;
         col -= 2;
@@ -352,7 +368,7 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row -= 2;
         col -= 1;
@@ -366,7 +382,7 @@ public class ChessGame {
         }
 
         row = kingPosition.getRow();
-        col = kingPosition.getRow();
+        col = kingPosition.getColumn();
 
         row -= 1;
         col -= 2;
