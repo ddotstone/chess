@@ -52,11 +52,9 @@ public class ChessGame {
         Collection<ChessMove> validMoves = new ArrayList<ChessMove>();
         for (ChessMove move : allMoves) {
             ChessPiece endPiece = board.getPiece(move.getEndPosition());
-            try {
-                this.makeMove(move);
-            } catch (InvalidMoveException e) {
-                return null;
-            }
+            board.addPiece(move.getStartPosition(), null);
+            board.addPiece(move.getEndPosition(), currPiece);
+
             if (!this.isInCheck(currPiece.getTeamColor())) {
                 validMoves.add(move);
             }
@@ -75,22 +73,32 @@ public class ChessGame {
     public void makeMove(ChessMove move) throws InvalidMoveException {
         ChessPosition start = move.getStartPosition();
         ChessPosition end = move.getEndPosition();
-        if (start.getRow() > 8 || start.getRow() < 1 || start.getColumn() > 8 || start.getColumn() < 1) {
-            throw new InvalidMoveException("Bad Start");
-        }
-        if (end.getRow() > 8 || end.getRow() < 1 || end.getColumn() > 8 || end.getColumn() < 1) {
-            throw new InvalidMoveException("Bad End");
-        }
         ChessPiece currPiece = board.getPiece(move.getStartPosition());
         if (currPiece == null) {
             throw new InvalidMoveException("Empty Space");
+        }
+        if (currPiece.getTeamColor() != teamTurn) {
+            throw new InvalidMoveException("Making move out of turn");
+        }
+        Collection<ChessMove> allMoves = validMoves(start);
+        boolean legalMove = false;
+        for (ChessMove currMove : allMoves) {
+            if (currMove.equals(move)) {
+                legalMove = true;
+            }
+        }
+
+        if (!legalMove) {
+            throw new InvalidMoveException("Not a valid move");
         }
         ChessPiece.PieceType endType = currPiece.getPieceType();
         if (move.getPromotionPiece() != null) {
             endType = move.getPromotionPiece();
         }
+
         board.addPiece(move.getStartPosition(), null);
         board.addPiece(move.getEndPosition(), new ChessPiece(currPiece.getTeamColor(), endType));
+        teamTurn = (teamTurn == TeamColor.BLACK) ? TeamColor.WHITE : TeamColor.BLACK;
     }
 
     /**
@@ -129,8 +137,6 @@ public class ChessGame {
             iterations++;
         } while (row >= 1 && row <= 8 && col >= 1 && col <= 8 &&
                 (board.getPiece(new ChessPosition(row, col)) == null));
-
-        ChessPiece test = board.getPiece(new ChessPosition(row, col));
 
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
