@@ -2,10 +2,15 @@ package dataaccess;
 
 import model.AuthData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class MemoryAuthDataDAO {
     Collection<AuthData> authDataCollection;
+
+    public MemoryAuthDataDAO() {
+        authDataCollection = new ArrayList<>();
+    }
 
     public void createAuth(AuthData authData) throws DataAccessException {
         authDataCollection.add(authData);
