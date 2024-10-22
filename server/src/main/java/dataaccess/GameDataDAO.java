@@ -49,5 +49,6 @@ public class MemoryGameDataDAO implements GameDataDAO {
     }
 
     public Collection<GameData> listGames() throws DataAccessException {
+        return gameDataCollection;
     }
 }
