@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MemoryGameDataDAO implements GameDataDAO {
+
     Collection<GameData> gameDataCollection;
 
     public MemoryGameDataDAO() {
@@ -13,6 +14,12 @@ public class MemoryGameDataDAO implements GameDataDAO {
         return;
     }
 
+    @Override
+    public void clear() throws DataAccessException {
+        gameDataCollection.clear();
+    }
+
+    @Override
     public GameData getGame(int gameID) throws DataAccessException {
         for (GameData game : gameDataCollection) {
             if (game.gameID() == gameID) {
@@ -22,10 +29,12 @@ public class MemoryGameDataDAO implements GameDataDAO {
         return null;
     }
 
+    @Override
     public void CreateGame(GameData gameData) throws DataAccessException {
         gameDataCollection.add(gameData);
     }
 
+    @Override
     public void UpdateGame(GameData gameData) throws DataAccessException {
         int gameID = gameData.gameID();
 
@@ -38,6 +47,7 @@ public class MemoryGameDataDAO implements GameDataDAO {
         return;
     }
 
+    @Override
     public Collection<GameData> listGames() throws DataAccessException {
         return gameDataCollection;
     }
