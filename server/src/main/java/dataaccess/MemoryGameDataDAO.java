@@ -32,6 +32,7 @@ public class MemoryGameDataDAO implements GameDataDAO {
         GameData gameToUpdate;
         for (GameData game : gameDataCollection) {
             gameDataCollection.remove(game);
+            break;
         }
         gameDataCollection.add(gameData);
         return;

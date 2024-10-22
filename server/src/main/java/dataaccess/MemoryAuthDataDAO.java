@@ -20,5 +20,12 @@ public class MemoryAuthDataDAO {
         return null;
     }
 
-    public void deleteAuth(AuthData authData) throws DataAccessException;
+    public void deleteAuth(String authToken) throws DataAccessException {
+        for (AuthData auth : authDataCollection) {
+            if (auth.authToken().equals(authToken)) {
+                authDataCollection.remove(auth);
+                break;
+            }
+        }
+    }
 }
