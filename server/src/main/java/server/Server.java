@@ -16,6 +16,8 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
+        this.RegisterErrorHandler();
+        this.RegisterHandlers();
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
@@ -30,7 +32,7 @@ public class Server {
     }
 
 
-    public void RegisterHandlers() {
+    private void RegisterHandlers() {
 
         // Session Handlers
         Spark.post("/session", (req, res) -> (new SessionHandler()).LoginHandler(req, res));
@@ -49,7 +51,7 @@ public class Server {
 
     }
 
-    public void RegisterErrorHandler() {
+    private void RegisterErrorHandler() {
         Spark.exception(DataAccessException.class, this::ErrorHandler);
         Spark.notFound((req, res) -> {
             var body = this.ErrorHandler(new NotFoundException(), req, res);
@@ -59,7 +61,7 @@ public class Server {
     }
 
 
-    public Object ErrorHandler(DataAccessException e, Request req, Response res) {
+    private Object ErrorHandler(DataAccessException e, Request req, Response res) {
         var body = new Gson().toJson(Map.of("message", String.format("Error: %s", e.getMessage())));
         res.type("application/json");
         res.status(e.getCode());
