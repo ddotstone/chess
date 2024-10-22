@@ -15,6 +15,6 @@ public class DatabaseHandler {
                 new MemoryUserDataDAO(),
                 new MemoryGameDataDAO())).clear();
         res.status(200);
-        return null;
+        return "{}";
     }
 }

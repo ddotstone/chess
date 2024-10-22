@@ -38,7 +38,7 @@ public class SessionHandler {
         String authToken = GetAuth(req);
         userService.logout(authToken);
         res.status(200);
-        return null;
+        return "{}";
     }
 
 }

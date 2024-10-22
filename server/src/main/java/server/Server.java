@@ -44,10 +44,10 @@ public class Server {
         Spark.put("/game", (req, res) -> (new GameHandler()).JoinGameRequest(req, res));
 
         // User Handlers
-        Spark.post("/game", (req, res) -> (new UserHandler()).RegisterHandler(req, res));
+        Spark.post("/user", (req, res) -> (new UserHandler()).RegisterHandler(req, res));
 
         // DatabaseHandlers
-        Spark.delete("/session", (req, res) -> (new DatabaseHandler()).ClearRequest(req, res));
+        Spark.delete("/db", (req, res) -> (new DatabaseHandler()).ClearRequest(req, res));
 
     }
 

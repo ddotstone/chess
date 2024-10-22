@@ -48,6 +48,6 @@ public class GameHandler {
         JoinGameRequest joinGameRequest = DeserializeJson(req.body(), JoinGameRequest.class);
         gameService.JoinGame(authToken, joinGameRequest);
         res.status(200);
-        return null;
+        return "{}";
     }
 }

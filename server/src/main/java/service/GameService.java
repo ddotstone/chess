@@ -18,14 +18,14 @@ public class GameService {
 
     public ListGameResponse ListGames(String authToken) throws DataAccessException {
         if (authDataDAO.getAuth(authToken) == null) {
-            return null;
+            throw new UnauthorizedException();
         }
         return new ListGameResponse(gameDataDAO.listGames());
     }
 
     public CreateGameResponse CreateGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
         if (authDataDAO.getAuth(authToken) == null) {
-            return null;
+            throw new UnauthorizedException();
         }
         GameData game = new GameData(gameCount++,
                 null,
@@ -39,12 +39,12 @@ public class GameService {
     public void JoinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
         AuthData authData = authDataDAO.getAuth(authToken);
         if (authData == null) {
-            return;
+            throw new UnauthorizedException();
         }
 
         GameData currGame = gameDataDAO.getGame(joinGameRequest.gameID());
         if (currGame == null) {
-            return;
+            throw new BadRequestException();
         }
 
         String blackUsername;
@@ -52,13 +52,13 @@ public class GameService {
 
         if (joinGameRequest.playerColor() == ChessGame.TeamColor.BLACK) {
             if (currGame.blackUsername() != null) {
-                return;
+                throw new AlreadyTakenException();
             }
             blackUsername = authData.username();
             whiteUsername = null;
         } else if (joinGameRequest.playerColor() == ChessGame.TeamColor.WHITE) {
             if (currGame.whiteUsername() != null) {
-                return;
+                throw new AlreadyTakenException();
             }
             whiteUsername = authData.username();
             blackUsername = null;

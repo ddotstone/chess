@@ -20,7 +20,7 @@ public class UserService {
 
     public RegisterResponse register(RegisterRequest registerRequest) throws DataAccessException {
         if (userDataDAO.getUser(registerRequest.username()) != null) {
-            return null;
+            throw new AlreadyTakenException();
         }
         AuthData authData = new AuthData(getUUID(), registerRequest.username());
         authDataDAO.createAuth(authData);
@@ -35,10 +35,10 @@ public class UserService {
     public LoginResponse login(LoginRequest loginRequest) throws DataAccessException {
         UserData userStored = userDataDAO.getUser(loginRequest.username());
         if (userStored == null) {
-            return null;
+            throw new UnauthorizedException();
         }
         if (!userStored.password().equals(loginRequest.password())) {
-            return null;
+            throw new UnauthorizedException();
         }
 
         AuthData authData = new AuthData(getUUID(), loginRequest.username());
