@@ -3,12 +3,10 @@ package service;
 import java.util.Collection;
 
 import chess.ChessGame;
-import dataaccess.AuthDataDAO;
-import dataaccess.DataAccessException;
-import dataaccess.GameDataDAO;
-import dataaccess.MemoryAuthDataDAO;
-import model.AuthData;
-import model.GameData;
+import dataaccess.*;
+import model.*;
+import request.*;
+import response.*;
 
 public class GameService {
     private static int gameCount = 0;
@@ -20,39 +18,60 @@ public class GameService {
         this.gameDataDAO = gameDataDAO;
     }
 
-    public Collection<GameData> listGames(AuthData auth) throws DataAccessException {
-        if (authDataDAO.getAuth(auth.authToken()) == null) {
+    public ListGameReponse listGames(ListGameRequest listGameRequest) throws DataAccessException {
+        if (authDataDAO.getAuth(listGameRequest.authToken()) == null) {
             return null;
         }
-        return gameDataDAO.listGames();
+        return new ListGameReponse(gameDataDAO.listGames());
     }
 
-    public GameData CreateGame(AuthData authData, GameData gameData) throws DataAccessException {
-        if (authDataDAO.getAuth(authData.authToken()) == null) {
+    public CreateGameResponse CreateGame(CreateGameRequest createGameRequest) throws DataAccessException {
+        if (authDataDAO.getAuth(createGameRequest.authToken()) == null) {
             return null;
         }
         GameData game = new GameData(gameCount++,
-                gameData.whiteUsername(),
-                gameData.blackUsername(),
-                gameData.gameName(),
-                gameData.game());
+                null,
+                null,
+                createGameRequest.gameName(),
+                null);
         gameDataDAO.CreateGame(game);
-        return game;
+        return new CreateGameResponse(Integer.toString(gameCount++));
     }
 
-    public void JoinGame(AuthData auth, GameData game) throws DataAccessException {
-        AuthData authData = authDataDAO.getAuth(auth.authToken());
+    public void JoinGame(JoinGameRequest joinGameRequest) throws DataAccessException {
+        AuthData authData = authDataDAO.getAuth(joinGameRequest.authToken());
         if (authData == null) {
             return;
         }
 
-        GameData currGame = gameDataDAO.getGame(game.gameID());
+        GameData currGame = gameDataDAO.getGame(joinGameRequest.gameID());
         if (currGame == null) {
             return;
         }
+
+        String blackUsername;
+        String whiteUsername;
+
+        if (joinGameRequest.color() == ChessGame.TeamColor.BLACK) {
+            if (currGame.blackUsername() != null) {
+                return;
+            }
+            blackUsername = authData.username();
+            whiteUsername = null;
+        } else if (joinGameRequest.color() == ChessGame.TeamColor.WHITE) {
+            if (currGame.whiteUsername() != null) {
+                return;
+            }
+            whiteUsername = authData.username();
+            blackUsername = null;
+        } else {
+            whiteUsername = null;
+            blackUsername = null;
+        }
+
         GameData updatedGame = new GameData(currGame,
-                game.whiteUsername(),
-                game.blackUsername(),
+                whiteUsername,
+                blackUsername,
                 currGame.gameName(),
                 currGame.game());
 

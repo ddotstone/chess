@@ -3,6 +3,8 @@ package service;
 import model.UserData;
 import model.AuthData;
 import dataaccess.*;
+import request.*;
+import response.*;
 
 import java.util.UUID;
 
@@ -16,32 +18,36 @@ public class UserService {
     }
 
 
-    public AuthData register(UserData user) throws DataAccessException {
-        if (userDataDAO.getUser(user.username()) != null) {
+    public RegisterResponse register(RegisterRequest registerRequest) throws DataAccessException {
+        if (userDataDAO.getUser(registerRequest.username()) != null) {
             return null;
         }
-        AuthData authData = new AuthData(getUUID(), user.username());
+        AuthData authData = new AuthData(getUUID(), registerRequest.username());
         authDataDAO.createAuth(authData);
+        UserData user = new UserData(registerRequest.username(),
+                registerRequest.password(),
+                registerRequest.email());
+
         userDataDAO.createUser(user);
-        return authData;
+        return new RegisterResponse(authData.authToken());
     }
 
-    public AuthData login(UserData user) throws DataAccessException {
-        UserData userStored = userDataDAO.getUser(user.username());
+    public LoginResponse login(LoginRequest loginRequest) throws DataAccessException {
+        UserData userStored = userDataDAO.getUser(loginRequest.username());
         if (userStored == null) {
             return null;
         }
-        if (!userStored.equals(user)) {
+        if (!userStored.password().equals(loginRequest.password())) {
             return null;
         }
 
-        AuthData authData = new AuthData(getUUID(), user.username());
+        AuthData authData = new AuthData(getUUID(), loginRequest.username());
         authDataDAO.createAuth(authData);
-        return authData;
+        return new LoginResponse(authData.authToken());
     }
 
-    public void logout(AuthData auth) throws DataAccessException {
-        authDataDAO.deleteAuth(auth.authToken());
+    public void logout(LogoutRequest logoutRequest) throws DataAccessException {
+        authDataDAO.deleteAuth(logoutRequest.authToken());
     }
 
     private String getUUID() {
