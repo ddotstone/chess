@@ -34,9 +34,18 @@ public class MemoryGameDataDAO implements GameDataDAO {
     }
 
     public void CreateGame(GameData gameData) throws DataAccessException {
+        gameDataCollection.add(gameData);
     }
 
     public void UpdateGame(GameData gameData) throws DataAccessException {
+        int gameID = gameData.gameID();
+
+        GameData gameToUpdate;
+        for (GameData game : gameDataCollection) {
+            gameDataCollection.remove(game);
+        }
+        gameDataCollection.add(gameData);
+        return;
     }
 
     public Collection<GameData> listGames() throws DataAccessException {
