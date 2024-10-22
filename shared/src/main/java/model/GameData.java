@@ -13,10 +13,12 @@ public record GameData(int gameID, String whiteUsername, String blackUsername, S
 
     @Override
     public String toString() {
+        String printWhiteUsername = (this.whiteUsername == null) ? "" : this.whiteUsername;
+        String printBlackUsername = (this.blackUsername == null) ? "" : this.blackUsername;
         return "{" +
                 "gameID=" + gameID +
-                ", whiteUsername='" + whiteUsername + '\'' +
-                ", blackUsername='" + blackUsername + '\'' +
+                ", whiteUsername='" + printWhiteUsername + '\'' +
+                ", blackUsername='" + printBlackUsername + '\'' +
                 ", gameName='" + gameName + '\'' +
                 '}';
     }

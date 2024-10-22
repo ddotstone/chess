@@ -14,6 +14,9 @@ public class ChessGame {
     private TeamColor teamTurn;
 
     public ChessGame(ChessGame another) {
+        if (another == null) {
+            return;
+        }
         if (another.board == null) {
             this.board = null;
         } else {
