@@ -8,8 +8,8 @@ import spark.Response;
 
 import java.util.Map;
 
-public class ClearHandler {
-    public void HandleRequest(Request req, Response res) throws DataAccessException {
+public class DatabaseHandler {
+    public void ClearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;
         (new DatabaseService(new MemoryAuthDataDAO(),
                 new MemoryUserDataDAO(),

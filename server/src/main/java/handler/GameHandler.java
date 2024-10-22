@@ -29,13 +29,23 @@ public class GameHandler {
         }
         CreateGameResponse createGameResponse = gameService.CreateGame(authToken, createGameRequest);
         res.body(SerializeJson(createGameResponse, CreateGameResponse.class));
+        res.status(200);
         return;
     }
 
     public void ListGameRequest(Request req, Response res) throws DataAccessException {
         String authToken = GetAuth(req);
-        ListGameResponse createGameResponse = gameService.ListGames(authToken);
-        res.body(SerializeJson(createGameResponse, CreateGameResponse.class));
+        ListGameResponse listGameResponse = gameService.ListGames(authToken);
+        res.body(SerializeJson(listGameResponse, ListGameResponse.class));
+        res.status(200);
+        return;
+    }
+
+    public void JoinGameRequest(Request req, Response res) throws DataAccessException {
+        String authToken = GetAuth(req);
+        JoinGameRequest joinGameRequest = DeserializeJson(req.body(), JoinGameRequest.class);
+        gameService.JoinGame(authToken, joinGameRequest);
+        res.status(200);
         return;
     }
 }

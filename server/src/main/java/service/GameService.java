@@ -33,7 +33,7 @@ public class GameService {
                 createGameRequest.gameName(),
                 null);
         gameDataDAO.CreateGame(game);
-        return new CreateGameResponse(Integer.toString(gameCount++));
+        return new CreateGameResponse(gameCount);
     }
 
     public void JoinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
