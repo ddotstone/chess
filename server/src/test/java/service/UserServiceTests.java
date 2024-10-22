@@ -50,4 +50,38 @@ public class UserServiceTests {
         });
     }
 
+    @Test
+    public void testSuccessLogin() throws DataAccessException {
+        // Register User
+        RegisterRequest registerRequest = new RegisterRequest("username", "password", "email");
+        RegisterResponse registerResponse = userService.register(registerRequest);
+
+        // Assert Login
+        LoginRequest loginRequest = new LoginRequest("username", "password");
+        LoginResponse loginResponse = userService.login(loginRequest);
+
+        // Assert Valid Authtoken
+        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+    }
+
+
+    @Test
+    public void testBadLoginFail() throws DataAccessException {
+        // Register User
+        RegisterRequest registerRequest = new RegisterRequest("username", "password", "email");
+        RegisterResponse registerResponse = userService.register(registerRequest);
+
+        // Bad username fail login
+        LoginRequest loginRequest = new LoginRequest("name", "password");
+        Assertions.assertThrows(UnauthorizedException.class, () -> {
+            LoginResponse loginResponse = userService.login(loginRequest);
+        });
+
+        // Bad password fail login
+        LoginRequest badPassword = new LoginRequest("username", "pass");
+        Assertions.assertThrows(UnauthorizedException.class, () -> {
+            LoginResponse loginResponse = userService.login(badPassword);
+        });
+    }
+
 }
