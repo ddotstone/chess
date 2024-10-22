@@ -29,7 +29,7 @@ public class HandlerUnitFunctions {
         String authToken = req.headers("authorization");
 
         if (authToken == null) {
-            throw new BadRequestException("bad request");
+            throw new BadRequestException();
         }
         return authToken;
     }

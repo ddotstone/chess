@@ -9,11 +9,12 @@ import spark.Response;
 import java.util.Map;
 
 public class DatabaseHandler {
-    public void ClearRequest(Request req, Response res) throws DataAccessException {
+    public Object ClearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;
         (new DatabaseService(new MemoryAuthDataDAO(),
                 new MemoryUserDataDAO(),
                 new MemoryGameDataDAO())).clear();
         res.status(200);
+        return null;
     }
 }

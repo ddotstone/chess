@@ -21,31 +21,33 @@ public class GameHandler {
         this.gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
     }
 
-    public void CreateGameRequest(Request req, Response res) throws DataAccessException {
+    public Object CreateGameRequest(Request req, Response res) throws DataAccessException {
         String authToken = GetAuth(req);
         CreateGameRequest createGameRequest = DeserializeJson(req.body(), CreateGameRequest.class);
         if (createGameRequest.gameName() == null) {
-            throw new BadRequestException("bad request");
+            throw new BadRequestException();
         }
         CreateGameResponse createGameResponse = gameService.CreateGame(authToken, createGameRequest);
-        res.body(SerializeJson(createGameResponse, CreateGameResponse.class));
+        var body = SerializeJson(createGameResponse, CreateGameResponse.class);
+        res.body(body);
         res.status(200);
-        return;
+        return body;
     }
 
-    public void ListGameRequest(Request req, Response res) throws DataAccessException {
+    public Object ListGameRequest(Request req, Response res) throws DataAccessException {
         String authToken = GetAuth(req);
         ListGameResponse listGameResponse = gameService.ListGames(authToken);
-        res.body(SerializeJson(listGameResponse, ListGameResponse.class));
+        var body = SerializeJson(listGameResponse, ListGameResponse.class);
+        res.body(body);
         res.status(200);
-        return;
+        return body;
     }
 
-    public void JoinGameRequest(Request req, Response res) throws DataAccessException {
+    public Object JoinGameRequest(Request req, Response res) throws DataAccessException {
         String authToken = GetAuth(req);
         JoinGameRequest joinGameRequest = DeserializeJson(req.body(), JoinGameRequest.class);
         gameService.JoinGame(authToken, joinGameRequest);
         res.status(200);
-        return;
+        return null;
     }
 }

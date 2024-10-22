@@ -1,9 +1,6 @@
 package handler;
 
-import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDataDAO;
-import dataaccess.MemoryGameDataDAO;
-import dataaccess.MemoryUserDataDAO;
+import dataaccess.*;
 import request.*;
 import response.*;
 import service.UserService;
@@ -23,16 +20,17 @@ public class UserHandler {
         this.userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
     }
 
-    public void RegisterHandler(Request req, Response res) throws DataAccessException {
+    public Object RegisterHandler(Request req, Response res) throws DataAccessException {
         RegisterRequest registerRequest = DeserializeJson(req.body(), RegisterRequest.class);
         if (registerRequest.username() == null ||
                 registerRequest.password() == null ||
                 registerRequest.email() == null) {
-            return;
+            throw new BadRequestException();
         }
         RegisterResponse registerResponse = userService.register(registerRequest);
-        res.body(SerializeJson(registerResponse, RegisterResponse.class));
+        var body = SerializeJson(registerResponse, RegisterResponse.class);
+        res.body(body);
         res.status(200);
-        return;
+        return body;
     }
 }
