@@ -46,6 +46,9 @@ public class GameHandler {
     public Object JoinGameRequest(Request req, Response res) throws DataAccessException {
         String authToken = GetAuth(req);
         JoinGameRequest joinGameRequest = DeserializeJson(req.body(), JoinGameRequest.class);
+        if (joinGameRequest.playerColor() == null || joinGameRequest.gameID() == 0) {
+            throw new BadRequestException();
+        }
         gameService.JoinGame(authToken, joinGameRequest);
         res.status(200);
         return "{}";
