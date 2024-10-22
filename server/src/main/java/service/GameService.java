@@ -1,7 +1,5 @@
 package service;
 
-import java.util.Collection;
-
 import chess.ChessGame;
 import dataaccess.*;
 import model.*;
@@ -18,15 +16,15 @@ public class GameService {
         this.gameDataDAO = gameDataDAO;
     }
 
-    public ListGameReponse listGames(ListGameRequest listGameRequest) throws DataAccessException {
-        if (authDataDAO.getAuth(listGameRequest.authToken()) == null) {
+    public ListGameResponse ListGames(String authToken) throws DataAccessException {
+        if (authDataDAO.getAuth(authToken) == null) {
             return null;
         }
-        return new ListGameReponse(gameDataDAO.listGames());
+        return new ListGameResponse(gameDataDAO.listGames());
     }
 
-    public CreateGameResponse CreateGame(CreateGameRequest createGameRequest) throws DataAccessException {
-        if (authDataDAO.getAuth(createGameRequest.authToken()) == null) {
+    public CreateGameResponse CreateGame(String authToken, CreateGameRequest createGameRequest) throws DataAccessException {
+        if (authDataDAO.getAuth(authToken) == null) {
             return null;
         }
         GameData game = new GameData(gameCount++,
@@ -38,8 +36,8 @@ public class GameService {
         return new CreateGameResponse(Integer.toString(gameCount++));
     }
 
-    public void JoinGame(JoinGameRequest joinGameRequest) throws DataAccessException {
-        AuthData authData = authDataDAO.getAuth(joinGameRequest.authToken());
+    public void JoinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
+        AuthData authData = authDataDAO.getAuth(authToken);
         if (authData == null) {
             return;
         }
@@ -52,13 +50,13 @@ public class GameService {
         String blackUsername;
         String whiteUsername;
 
-        if (joinGameRequest.color() == ChessGame.TeamColor.BLACK) {
+        if (joinGameRequest.playerColor() == ChessGame.TeamColor.BLACK) {
             if (currGame.blackUsername() != null) {
                 return;
             }
             blackUsername = authData.username();
             whiteUsername = null;
-        } else if (joinGameRequest.color() == ChessGame.TeamColor.WHITE) {
+        } else if (joinGameRequest.playerColor() == ChessGame.TeamColor.WHITE) {
             if (currGame.whiteUsername() != null) {
                 return;
             }

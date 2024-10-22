@@ -29,7 +29,7 @@ public class UserService {
                 registerRequest.email());
 
         userDataDAO.createUser(user);
-        return new RegisterResponse(authData.authToken());
+        return new RegisterResponse(registerRequest.username(), authData.authToken());
     }
 
     public LoginResponse login(LoginRequest loginRequest) throws DataAccessException {
@@ -43,11 +43,11 @@ public class UserService {
 
         AuthData authData = new AuthData(getUUID(), loginRequest.username());
         authDataDAO.createAuth(authData);
-        return new LoginResponse(authData.authToken());
+        return new LoginResponse(loginRequest.username(), authData.authToken());
     }
 
-    public void logout(LogoutRequest logoutRequest) throws DataAccessException {
-        authDataDAO.deleteAuth(logoutRequest.authToken());
+    public void logout(String authToken) throws DataAccessException {
+        authDataDAO.deleteAuth(authToken);
     }
 
     private String getUUID() {

@@ -1,6 +1,6 @@
 package server;
 
-import spark.*
+import spark.*;
 
 public class ServerHandlerRegister {
     public static void RegisterHandles() {
