@@ -7,11 +7,7 @@ import java.util.Collection;
 
 public class MemoryAuthDataDAO implements AuthDataDAO {
 
-    Collection<AuthData> authDataCollection;
-
-    public MemoryAuthDataDAO() {
-        authDataCollection = new ArrayList<>();
-    }
+    private static final Collection<AuthData> authDataCollection = new ArrayList<>();
 
     @Override
     public void clear() {

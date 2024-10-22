@@ -7,12 +7,7 @@ import java.util.Collection;
 
 public class MemoryGameDataDAO implements GameDataDAO {
 
-    Collection<GameData> gameDataCollection;
-
-    public MemoryGameDataDAO() {
-        gameDataCollection = new ArrayList<>();
-        return;
-    }
+    public static final Collection<GameData> gameDataCollection = new ArrayList<>();
 
     @Override
     public void clear() throws DataAccessException {

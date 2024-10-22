@@ -7,11 +7,7 @@ import java.util.Collection;
 
 public class MemoryUserDataDAO implements UserDataDAO {
 
-    Collection<UserData> userDataCollection;
-
-    public MemoryUserDataDAO() {
-        userDataCollection = new ArrayList<>();
-    }
+    public static final Collection<UserData> userDataCollection = new ArrayList<>();
 
     @Override
     public void clear() {
