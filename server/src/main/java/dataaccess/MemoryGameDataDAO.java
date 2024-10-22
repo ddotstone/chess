@@ -4,6 +4,7 @@ import model.GameData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class MemoryGameDataDAO implements GameDataDAO {
 
@@ -34,12 +35,16 @@ public class MemoryGameDataDAO implements GameDataDAO {
         int gameID = gameData.gameID();
 
         GameData gameToUpdate;
-        for (GameData game : gameDataCollection) {
-            gameDataCollection.remove(game);
-            break;
+        Iterator<GameData> listIterator = gameDataCollection.iterator();
+        while (listIterator.hasNext()) {
+            GameData currentGame = listIterator.next();
+            if (currentGame.gameID() == gameData.gameID()) {
+                listIterator.remove();
+                gameDataCollection.add(gameData);
+                return;
+            }
         }
-        gameDataCollection.add(gameData);
-        return;
+        throw new UnauthorizedException();
     }
 
     @Override
