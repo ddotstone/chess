@@ -1,18 +1,11 @@
 package service;
 
 import dataaccess.*;
-import model.AuthData;
-import model.GameData;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import model.*;
 import request.*;
 import response.*;
-
-import java.util.Set;
 
 public class DatabaseServiceTests {
     private static DatabaseService databaseService;
