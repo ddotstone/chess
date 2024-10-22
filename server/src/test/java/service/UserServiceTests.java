@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dataaccess.*;
-import request.LoginRequest;
 import request.*;
 import response.*;
 
@@ -24,7 +23,6 @@ public class UserServiceTests {
     @BeforeEach
     public void clearDatabase() throws DataAccessException {
         databaseService.clear();
-
     }
 
     @Test
@@ -84,4 +82,27 @@ public class UserServiceTests {
         });
     }
 
+    public void testLogout() throws DataAccessException {
+        // Register User
+        RegisterRequest registerRequest = new RegisterRequest("username", "password", "email");
+        RegisterResponse registerResponse = userService.register(registerRequest);
+
+        // Assert Valid Authtoken
+        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+
+        // Assert Logout Success
+        userService.logout(registerResponse.authToken());
+
+        Assertions.assertThrows(UnauthorizedException.class, () -> {
+            ListGameResponse listGameResponseFail = gameService.ListGames(registerResponse.authToken());
+        });
+    }
+
+    public void testLogoutBadAuth() throws DataAccessException {
+        // Assert Logout Fail
+
+        Assertions.assertThrows(UnauthorizedException.class, () -> {
+            userService.logout("not real");
+        });
+    }
 }
