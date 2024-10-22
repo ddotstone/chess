@@ -13,6 +13,16 @@ public class ChessGame {
     private ChessBoard board;
     private TeamColor teamTurn;
 
+    public ChessGame(ChessGame another) {
+        if (another.board == null) {
+            this.board = null;
+        } else {
+            this.board = new ChessBoard(another.getBoard());
+        }
+        this.teamTurn = another.getTeamTurn();
+        return;
+    }
+
     public ChessGame() {
         board = new ChessBoard();
         board.resetBoard();
