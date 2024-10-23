@@ -16,7 +16,7 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
-        this.RegisterErrorHandler();
+        this.registerErrorHandler();
         this.RegisterHandlers();
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
@@ -35,33 +35,33 @@ public class Server {
     private void RegisterHandlers() {
 
         // Session Handlers
-        Spark.post("/session", (req, res) -> (new SessionHandler()).LoginHandler(req, res));
-        Spark.delete("/session", (req, res) -> (new SessionHandler()).LogoutHandler(req, res));
+        Spark.post("/session", (req, res) -> (new SessionHandler()).loginHandler(req, res));
+        Spark.delete("/session", (req, res) -> (new SessionHandler()).logoutHandler(req, res));
 
         // Game Handler
-        Spark.post("/game", (req, res) -> (new GameHandler()).CreateGameRequest(req, res));
-        Spark.get("/game", (req, res) -> (new GameHandler()).ListGameRequest(req, res));
-        Spark.put("/game", (req, res) -> (new GameHandler()).JoinGameRequest(req, res));
+        Spark.post("/game", (req, res) -> (new GameHandler()).createGameRequest(req, res));
+        Spark.get("/game", (req, res) -> (new GameHandler()).listGameRequest(req, res));
+        Spark.put("/game", (req, res) -> (new GameHandler()).joinGameRequest(req, res));
 
         // User Handlers
-        Spark.post("/user", (req, res) -> (new UserHandler()).RegisterHandler(req, res));
+        Spark.post("/user", (req, res) -> (new UserHandler()).registerHandler(req, res));
 
         // DatabaseHandlers
-        Spark.delete("/db", (req, res) -> (new DatabaseHandler()).ClearRequest(req, res));
+        Spark.delete("/db", (req, res) -> (new DatabaseHandler()).clearRequest(req, res));
 
     }
 
-    private void RegisterErrorHandler() {
-        Spark.exception(DataAccessException.class, this::ErrorHandler);
+    private void registerErrorHandler() {
+        Spark.exception(DataAccessException.class, this::errorHandler);
         Spark.notFound((req, res) -> {
-            var body = this.ErrorHandler(new NotFoundException(), req, res);
+            var body = this.errorHandler(new NotFoundException(), req, res);
             return body;
         });
 
     }
 
 
-    private Object ErrorHandler(DataAccessException e, Request req, Response res) {
+    private Object errorHandler(DataAccessException e, Request req, Response res) {
         var body = new Gson().toJson(Map.of("message", String.format("Error: %s", e.getMessage())));
         res.type("application/json");
         res.status(e.getCode());

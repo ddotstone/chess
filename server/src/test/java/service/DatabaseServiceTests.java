@@ -27,7 +27,7 @@ public class DatabaseServiceTests {
 
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
-        CreateGameResponse createGameResponse = gameService.CreateGame(registerResponse.authToken(), createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
 
         // Clear Database
         databaseService.clear();
@@ -42,12 +42,12 @@ public class DatabaseServiceTests {
 
         RegisterResponse finalRegisterResponse = registerResponse;
         Assertions.assertThrows(UnauthorizedException.class, () -> {
-            ListGameResponse listGameResponse = gameService.ListGames(finalRegisterResponse.authToken());
+            ListGameResponse listGameResponse = gameService.listGames(finalRegisterResponse.authToken());
         });
 
         // Assert Game was cleared
         registerResponse = userService.register(registerRequest);
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
         Assertions.assertEquals(0, listGameResponse.games().size());
     }
 

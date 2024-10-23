@@ -7,22 +7,22 @@ import java.util.Collection;
 
 public class MemoryUserDataDAO implements UserDataDAO {
 
-    public static final Collection<UserData> userDataCollection = new ArrayList<>();
+    public static final Collection<UserData> USER_DATA_COLLECTION = new ArrayList<>();
 
     @Override
     public void clear() {
-        userDataCollection.clear();
+        USER_DATA_COLLECTION.clear();
     }
 
     @Override
     public void createUser(UserData userData) throws DataAccessException {
-        userDataCollection.add(userData);
+        USER_DATA_COLLECTION.add(userData);
         return;
     }
 
     @Override
     public UserData getUser(String username) throws DataAccessException {
-        for (UserData user : userDataCollection) {
+        for (UserData user : USER_DATA_COLLECTION) {
             if (user.username().equals(username)) {
                 return user;
             }

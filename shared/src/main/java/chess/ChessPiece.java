@@ -94,12 +94,12 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesBishop(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] bishop_patterns = new ChessMovePatterns[4];
-        bishop_patterns[0] = new ChessMovePatterns(1, 1, true, true);
-        bishop_patterns[1] = new ChessMovePatterns(1, -1, true, true);
-        bishop_patterns[2] = new ChessMovePatterns(-1, 1, true, true);
-        bishop_patterns[3] = new ChessMovePatterns(-1, -1, true, true);
-        return populateSimpleMoves(board, myPosition, bishop_patterns);
+        ChessMovePatterns[] bishopPatterns = new ChessMovePatterns[4];
+        bishopPatterns[0] = new ChessMovePatterns(1, 1, true, true);
+        bishopPatterns[1] = new ChessMovePatterns(1, -1, true, true);
+        bishopPatterns[2] = new ChessMovePatterns(-1, 1, true, true);
+        bishopPatterns[3] = new ChessMovePatterns(-1, -1, true, true);
+        return populateSimpleMoves(board, myPosition, bishopPatterns);
     }
 
     /**
@@ -110,16 +110,16 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesKing(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] king_patterns = new ChessMovePatterns[8];
-        king_patterns[0] = new ChessMovePatterns(1, 1, true, false);
-        king_patterns[1] = new ChessMovePatterns(1, 0, true, false);
-        king_patterns[2] = new ChessMovePatterns(0, 1, true, false);
-        king_patterns[3] = new ChessMovePatterns(1, -1, true, false);
-        king_patterns[4] = new ChessMovePatterns(-1, 1, true, false);
-        king_patterns[5] = new ChessMovePatterns(-1, -1, true, false);
-        king_patterns[6] = new ChessMovePatterns(-1, 0, true, false);
-        king_patterns[7] = new ChessMovePatterns(0, -1, true, false);
-        return populateSimpleMoves(board, myPosition, king_patterns);
+        ChessMovePatterns[] kingPatterns = new ChessMovePatterns[8];
+        kingPatterns[0] = new ChessMovePatterns(1, 1, true, false);
+        kingPatterns[1] = new ChessMovePatterns(1, 0, true, false);
+        kingPatterns[2] = new ChessMovePatterns(0, 1, true, false);
+        kingPatterns[3] = new ChessMovePatterns(1, -1, true, false);
+        kingPatterns[4] = new ChessMovePatterns(-1, 1, true, false);
+        kingPatterns[5] = new ChessMovePatterns(-1, -1, true, false);
+        kingPatterns[6] = new ChessMovePatterns(-1, 0, true, false);
+        kingPatterns[7] = new ChessMovePatterns(0, -1, true, false);
+        return populateSimpleMoves(board, myPosition, kingPatterns);
     }
 
     /**
@@ -130,16 +130,16 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesKnight(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] knight_patterns = new ChessMovePatterns[8];
-        knight_patterns[0] = new ChessMovePatterns(1, 2, true, false);
-        knight_patterns[1] = new ChessMovePatterns(2, 1, true, false);
-        knight_patterns[2] = new ChessMovePatterns(-1, 2, true, false);
-        knight_patterns[3] = new ChessMovePatterns(-2, 1, true, false);
-        knight_patterns[4] = new ChessMovePatterns(1, -2, true, false);
-        knight_patterns[5] = new ChessMovePatterns(2, -1, true, false);
-        knight_patterns[6] = new ChessMovePatterns(-1, -2, true, false);
-        knight_patterns[7] = new ChessMovePatterns(-2, -1, true, false);
-        return populateSimpleMoves(board, myPosition, knight_patterns);
+        ChessMovePatterns[] knightPatterns = new ChessMovePatterns[8];
+        knightPatterns[0] = new ChessMovePatterns(1, 2, true, false);
+        knightPatterns[1] = new ChessMovePatterns(2, 1, true, false);
+        knightPatterns[2] = new ChessMovePatterns(-1, 2, true, false);
+        knightPatterns[3] = new ChessMovePatterns(-2, 1, true, false);
+        knightPatterns[4] = new ChessMovePatterns(1, -2, true, false);
+        knightPatterns[5] = new ChessMovePatterns(2, -1, true, false);
+        knightPatterns[6] = new ChessMovePatterns(-1, -2, true, false);
+        knightPatterns[7] = new ChessMovePatterns(-2, -1, true, false);
+        return populateSimpleMoves(board, myPosition, knightPatterns);
     }
 
     /**
@@ -150,12 +150,12 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesPawn(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] pawn_patterns = new ChessMovePatterns[3];
-        pawn_patterns[0] = new ChessMovePatterns(1, 0, false, false);
-        pawn_patterns[1] = new ChessMovePatterns(1, 1, true, false, true);
-        pawn_patterns[2] = new ChessMovePatterns(1, -1, true, false, true);
+        ChessMovePatterns[] pawnPatterns = new ChessMovePatterns[3];
+        pawnPatterns[0] = new ChessMovePatterns(1, 0, false, false);
+        pawnPatterns[1] = new ChessMovePatterns(1, 1, true, false, true);
+        pawnPatterns[2] = new ChessMovePatterns(1, -1, true, false, true);
 
-        Collection<ChessMove> simpleMoves = populateSimpleMoves(board, myPosition, pawn_patterns);
+        Collection<ChessMove> simpleMoves = populateSimpleMoves(board, myPosition, pawnPatterns);
 
         // Nonstandard moves
         int promotionRow = (this.teamColor == ChessGame.TeamColor.WHITE) ? 8 : 1;
@@ -170,16 +170,16 @@ public class ChessPiece {
                 possibleMoves.add(move);
             }
         }
-        int home_row = (this.teamColor == ChessGame.TeamColor.WHITE) ? 2 : 7;
-        int row_multiplier = (this.teamColor == ChessGame.TeamColor.WHITE) ? 1 : -1;
-        if (myPosition.getRow() == home_row) {
-            ChessPiece ahead_1 = board.getPiece(new ChessPosition(myPosition.getRow() + row_multiplier,
+        int homeRow = (this.teamColor == ChessGame.TeamColor.WHITE) ? 2 : 7;
+        int rowMultiplier = (this.teamColor == ChessGame.TeamColor.WHITE) ? 1 : -1;
+        if (myPosition.getRow() == homeRow) {
+            ChessPiece ahead1 = board.getPiece(new ChessPosition(myPosition.getRow() + rowMultiplier,
                     myPosition.getColumn()));
-            ChessPosition ahead_2_square = new ChessPosition(myPosition.getRow() + 2 * row_multiplier,
+            ChessPosition ahead2Square = new ChessPosition(myPosition.getRow() + 2 * rowMultiplier,
                     myPosition.getColumn());
-            ChessPiece ahead_2 = board.getPiece(ahead_2_square);
-            if (ahead_1 == null && ahead_2 == null) {
-                possibleMoves.add(new ChessMove(myPosition, ahead_2_square, null));
+            ChessPiece ahead_2 = board.getPiece(ahead2Square);
+            if (ahead1 == null && ahead_2 == null) {
+                possibleMoves.add(new ChessMove(myPosition, ahead2Square, null));
             }
         }
 
@@ -194,16 +194,16 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesQueen(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] queen_patterns = new ChessMovePatterns[8];
-        queen_patterns[0] = new ChessMovePatterns(1, 1, true, true);
-        queen_patterns[1] = new ChessMovePatterns(1, 0, true, true);
-        queen_patterns[2] = new ChessMovePatterns(0, 1, true, true);
-        queen_patterns[3] = new ChessMovePatterns(1, -1, true, true);
-        queen_patterns[4] = new ChessMovePatterns(-1, 1, true, true);
-        queen_patterns[5] = new ChessMovePatterns(-1, -1, true, true);
-        queen_patterns[6] = new ChessMovePatterns(-1, 0, true, true);
-        queen_patterns[7] = new ChessMovePatterns(0, -1, true, true);
-        return populateSimpleMoves(board, myPosition, queen_patterns);
+        ChessMovePatterns[] queenPatterns = new ChessMovePatterns[8];
+        queenPatterns[0] = new ChessMovePatterns(1, 1, true, true);
+        queenPatterns[1] = new ChessMovePatterns(1, 0, true, true);
+        queenPatterns[2] = new ChessMovePatterns(0, 1, true, true);
+        queenPatterns[3] = new ChessMovePatterns(1, -1, true, true);
+        queenPatterns[4] = new ChessMovePatterns(-1, 1, true, true);
+        queenPatterns[5] = new ChessMovePatterns(-1, -1, true, true);
+        queenPatterns[6] = new ChessMovePatterns(-1, 0, true, true);
+        queenPatterns[7] = new ChessMovePatterns(0, -1, true, true);
+        return populateSimpleMoves(board, myPosition, queenPatterns);
     }
 
     /**
@@ -214,12 +214,12 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateMovesRook(ChessBoard board, ChessPosition myPosition) {
-        ChessMovePatterns[] rook_patterns = new ChessMovePatterns[4];
-        rook_patterns[0] = new ChessMovePatterns(1, 0, true, true);
-        rook_patterns[1] = new ChessMovePatterns(0, 1, true, true);
-        rook_patterns[2] = new ChessMovePatterns(-1, 0, true, true);
-        rook_patterns[3] = new ChessMovePatterns(0, -1, true, true);
-        return populateSimpleMoves(board, myPosition, rook_patterns);
+        ChessMovePatterns[] rookPatterns = new ChessMovePatterns[4];
+        rookPatterns[0] = new ChessMovePatterns(1, 0, true, true);
+        rookPatterns[1] = new ChessMovePatterns(0, 1, true, true);
+        rookPatterns[2] = new ChessMovePatterns(-1, 0, true, true);
+        rookPatterns[3] = new ChessMovePatterns(0, -1, true, true);
+        return populateSimpleMoves(board, myPosition, rookPatterns);
     }
 
     /**
@@ -231,38 +231,38 @@ public class ChessPiece {
      * @return a collection of possible ChessMoves
      */
     public Collection<ChessMove> populateSimpleMoves(ChessBoard board, ChessPosition myPosition, ChessMovePatterns[] movePatterns) {
-        int color_multiplier = (this.teamColor == ChessGame.TeamColor.BLACK) ? -1 : 1;
+        int colorMultiplier = (this.teamColor == ChessGame.TeamColor.BLACK) ? -1 : 1;
 
-        Collection<ChessMove> all_moves = new ArrayList<ChessMove>();
+        Collection<ChessMove> allMoves = new ArrayList<ChessMove>();
         for (ChessMovePatterns movePattern : movePatterns) {
-            int curr_row = myPosition.getRow();
-            int curr_col = myPosition.getColumn();
+            int currRow = myPosition.getRow();
+            int currCol = myPosition.getColumn();
             ChessPiece pieceInSquare;
             do {
-                curr_row += color_multiplier * movePattern.row_diff();
-                curr_col += color_multiplier * movePattern.col_diff();
+                currRow += colorMultiplier * movePattern.row_diff();
+                currCol += colorMultiplier * movePattern.col_diff();
 
-                if (curr_row > ChessBoard.N_ROWS || curr_col > ChessBoard.N_COLS) {
+                if (currRow > ChessBoard.N_ROWS || currCol > ChessBoard.N_COLS) {
                     break;
                 }
-                if (curr_row <= 0 || curr_col <= 0) {
+                if (currRow <= 0 || currCol <= 0) {
                     break;
                 }
-                pieceInSquare = board.getPiece(new ChessPosition(curr_row, curr_col));
-                ChessPosition dest = new ChessPosition(curr_row, curr_col);
+                pieceInSquare = board.getPiece(new ChessPosition(currRow, currCol));
+                ChessPosition dest = new ChessPosition(currRow, currCol);
                 if (pieceInSquare != null) {
                     if ((pieceInSquare.teamColor != this.teamColor) &&
                             (pieceInSquare.pieceType != PieceType.KING) &&
                             movePattern.canTake()) {
-                        all_moves.add(new ChessMove(myPosition, dest, null));
+                        allMoves.add(new ChessMove(myPosition, dest, null));
                     }
                 } else if (!movePattern.needTakeToMove()) {
-                    all_moves.add(new ChessMove(myPosition, dest, null));
+                    allMoves.add(new ChessMove(myPosition, dest, null));
                 }
 
-            } while (movePattern.canRepeat() && (board.getPiece(new ChessPosition(curr_row, curr_col))) == null);
+            } while (movePattern.canRepeat() && (board.getPiece(new ChessPosition(currRow, currCol))) == null);
         }
-        return all_moves;
+        return allMoves;
     }
 
     /**

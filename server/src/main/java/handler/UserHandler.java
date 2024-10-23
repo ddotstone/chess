@@ -9,8 +9,6 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 
-import javax.xml.crypto.Data;
-
 
 public class UserHandler {
     private final UserService userService;
@@ -19,15 +17,15 @@ public class UserHandler {
         this.userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
     }
 
-    public Object RegisterHandler(Request req, Response res) throws DataAccessException {
-        RegisterRequest registerRequest = DeserializeJson(req.body(), RegisterRequest.class);
+    public Object registerHandler(Request req, Response res) throws DataAccessException {
+        RegisterRequest registerRequest = deserializeJson(req.body(), RegisterRequest.class);
         if (registerRequest.username() == null ||
                 registerRequest.password() == null ||
                 registerRequest.email() == null) {
             throw new BadRequestException();
         }
         RegisterResponse registerResponse = userService.register(registerRequest);
-        var body = SerializeJson(registerResponse, RegisterResponse.class);
+        var body = serializeJson(registerResponse, RegisterResponse.class);
         res.body(body);
         res.status(200);
         return body;

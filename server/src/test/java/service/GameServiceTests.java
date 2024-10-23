@@ -36,10 +36,10 @@ public class GameServiceTests {
 
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
-        CreateGameResponse createGameResponse = gameService.CreateGame(registerResponse.authToken(), createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
 
         // List Game
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Game Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -52,7 +52,7 @@ public class GameServiceTests {
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
         Assertions.assertThrows(UnauthorizedException.class, () -> {
-            CreateGameResponse createGameResponse = gameService.CreateGame("not real", createGameRequest);
+            CreateGameResponse createGameResponse = gameService.createGame("not real", createGameRequest);
         });
     }
 
@@ -64,10 +64,10 @@ public class GameServiceTests {
 
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
-        CreateGameResponse createGameResponse = gameService.CreateGame(registerResponse.authToken(), createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
 
         // List Game
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Game Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -79,7 +79,7 @@ public class GameServiceTests {
 
         // List Game
         Assertions.assertThrows(UnauthorizedException.class, () -> {
-            ListGameResponse listGameResponse = gameService.ListGames("not real");
+            ListGameResponse listGameResponse = gameService.listGames("not real");
         });
     }
 
@@ -91,10 +91,10 @@ public class GameServiceTests {
 
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
-        CreateGameResponse createGameResponse = gameService.CreateGame(registerResponse.authToken(), createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
 
         // List Game
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Game Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -102,10 +102,10 @@ public class GameServiceTests {
 
         // Join Game
         JoinGameRequest joinGameRequest = new JoinGameRequest(1, ChessGame.TeamColor.BLACK);
-        gameService.JoinGame(registerResponse.authToken(), joinGameRequest);
+        gameService.joinGame(registerResponse.authToken(), joinGameRequest);
 
         // List Game
-        listGameResponse = gameService.ListGames(registerResponse.authToken());
+        listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Black Player Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -121,10 +121,10 @@ public class GameServiceTests {
 
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
-        CreateGameResponse createGameResponse = gameService.CreateGame(registerResponse.authToken(), createGameRequest);
+        CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
 
         // List Game
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Game Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -132,10 +132,10 @@ public class GameServiceTests {
 
         // Join Game
         JoinGameRequest joinGameRequest = new JoinGameRequest(1, ChessGame.TeamColor.BLACK);
-        gameService.JoinGame(registerResponse.authToken(), joinGameRequest);
+        gameService.joinGame(registerResponse.authToken(), joinGameRequest);
 
         // List Game
-        listGameResponse = gameService.ListGames(registerResponse.authToken());
+        listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Black Player Name Correct
         Assertions.assertEquals(listGameResponse.games().size(), 1);
@@ -145,7 +145,7 @@ public class GameServiceTests {
         joinGameRequest = new JoinGameRequest(1, ChessGame.TeamColor.BLACK);
         JoinGameRequest finalJoinGameRequest = joinGameRequest;
         Assertions.assertThrows(AlreadyTakenException.class, () -> {
-            gameService.JoinGame(registerResponse.authToken(), finalJoinGameRequest);
+            gameService.joinGame(registerResponse.authToken(), finalJoinGameRequest);
         });
     }
 }

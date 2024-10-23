@@ -7,7 +7,7 @@ import spark.Request;
 import spark.Response;
 
 public class DatabaseHandler {
-    public Object ClearRequest(Request req, Response res) throws DataAccessException {
+    public Object clearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;
         (new DatabaseService(new MemoryAuthDataDAO(),
                 new MemoryUserDataDAO(),

@@ -59,7 +59,7 @@ public class UserServiceTests {
         LoginResponse loginResponse = userService.login(loginRequest);
 
         // Assert Valid Authtoken
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
     }
 
 
@@ -88,13 +88,13 @@ public class UserServiceTests {
         RegisterResponse registerResponse = userService.register(registerRequest);
 
         // Assert Valid Authtoken
-        ListGameResponse listGameResponse = gameService.ListGames(registerResponse.authToken());
+        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
 
         // Assert Logout Success
         userService.logout(registerResponse.authToken());
 
         Assertions.assertThrows(UnauthorizedException.class, () -> {
-            ListGameResponse listGameResponseFail = gameService.ListGames(registerResponse.authToken());
+            ListGameResponse listGameResponseFail = gameService.listGames(registerResponse.authToken());
         });
     }
 

@@ -8,21 +8,21 @@ import java.util.Iterator;
 
 public class MemoryAuthDataDAO implements AuthDataDAO {
 
-    private static final Collection<AuthData> authDataCollection = new ArrayList<>();
+    private static final Collection<AuthData> AUTH_DATA_COLLECTION = new ArrayList<>();
 
     @Override
     public void clear() {
-        authDataCollection.clear();
+        AUTH_DATA_COLLECTION.clear();
     }
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
-        authDataCollection.add(authData);
+        AUTH_DATA_COLLECTION.add(authData);
     }
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
-        for (AuthData auth : authDataCollection) {
+        for (AuthData auth : AUTH_DATA_COLLECTION) {
             if (auth.authToken().equals(authToken)) {
                 return auth;
             }
@@ -32,7 +32,7 @@ public class MemoryAuthDataDAO implements AuthDataDAO {
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-        Iterator<AuthData> listIterator = authDataCollection.iterator();
+        Iterator<AuthData> listIterator = AUTH_DATA_COLLECTION.iterator();
         while (listIterator.hasNext()) {
             AuthData auth = listIterator.next();
             if (auth.authToken().equals(authToken)) {

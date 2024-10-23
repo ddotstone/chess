@@ -9,7 +9,8 @@ import java.lang.reflect.Type;
 import spark.Request;
 
 public class HandlerUnitFunctions {
-    public static String SerializeJson(Object target, Type typeOfTarget) {
+
+    public static String serializeJson(Object target, Type typeOfTarget) {
         if (target == null) {
             return null;
         }
@@ -17,7 +18,7 @@ public class HandlerUnitFunctions {
         return serializer.toJson(target, typeOfTarget);
     }
 
-    public static <T> T DeserializeJson(String target, Class<T> classOfT) {
+    public static <T> T deserializeJson(String target, Class<T> classOfT) {
         if (target == null) {
             return null;
         }
@@ -25,7 +26,7 @@ public class HandlerUnitFunctions {
         return serializer.fromJson(target, classOfT);
     }
 
-    public static String GetAuth(Request req) throws DataAccessException {
+    public static String getAuth(Request req) throws DataAccessException {
         String authToken = req.headers("authorization");
 
         if (authToken == null) {

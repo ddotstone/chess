@@ -16,35 +16,35 @@ public class GameHandler {
         this.gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
     }
 
-    public Object CreateGameRequest(Request req, Response res) throws DataAccessException {
-        String authToken = GetAuth(req);
-        CreateGameRequest createGameRequest = DeserializeJson(req.body(), CreateGameRequest.class);
+    public Object createGameRequest(Request req, Response res) throws DataAccessException {
+        String authToken = getAuth(req);
+        CreateGameRequest createGameRequest = deserializeJson(req.body(), CreateGameRequest.class);
         if (createGameRequest.gameName() == null) {
             throw new BadRequestException();
         }
-        CreateGameResponse createGameResponse = gameService.CreateGame(authToken, createGameRequest);
-        var body = SerializeJson(createGameResponse, CreateGameResponse.class);
+        CreateGameResponse createGameResponse = gameService.createGame(authToken, createGameRequest);
+        var body = serializeJson(createGameResponse, CreateGameResponse.class);
         res.body(body);
         res.status(200);
         return body;
     }
 
-    public Object ListGameRequest(Request req, Response res) throws DataAccessException {
-        String authToken = GetAuth(req);
-        ListGameResponse listGameResponse = gameService.ListGames(authToken);
-        var body = SerializeJson(listGameResponse, ListGameResponse.class);
+    public Object listGameRequest(Request req, Response res) throws DataAccessException {
+        String authToken = getAuth(req);
+        ListGameResponse listGameResponse = gameService.listGames(authToken);
+        var body = serializeJson(listGameResponse, ListGameResponse.class);
         res.body(body);
         res.status(200);
         return body;
     }
 
-    public Object JoinGameRequest(Request req, Response res) throws DataAccessException {
-        String authToken = GetAuth(req);
-        JoinGameRequest joinGameRequest = DeserializeJson(req.body(), JoinGameRequest.class);
+    public Object joinGameRequest(Request req, Response res) throws DataAccessException {
+        String authToken = getAuth(req);
+        JoinGameRequest joinGameRequest = deserializeJson(req.body(), JoinGameRequest.class);
         if (joinGameRequest.playerColor() == null || joinGameRequest.gameID() == 0) {
             throw new BadRequestException();
         }
-        gameService.JoinGame(authToken, joinGameRequest);
+        gameService.joinGame(authToken, joinGameRequest);
         res.status(200);
         return "{}";
     }
