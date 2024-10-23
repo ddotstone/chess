@@ -14,7 +14,7 @@ public class UserServiceTests {
     private static UserService userService;
 
     @BeforeAll
-    public static void createDatabase() {
+    public static void createDatabaseUser() {
         databaseService = new DatabaseService(new MemoryAuthDataDAO(), new MemoryUserDataDAO(), new MemoryGameDataDAO());
         gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
         userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
@@ -82,6 +82,7 @@ public class UserServiceTests {
         });
     }
 
+    @Test
     public void testLogout() throws DataAccessException {
         // Register User
         RegisterRequest registerRequest = new RegisterRequest("username", "password", "email");
@@ -98,6 +99,7 @@ public class UserServiceTests {
         });
     }
 
+    @Test
     public void testLogoutBadAuth() throws DataAccessException {
         // Assert Logout Fail
 

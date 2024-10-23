@@ -16,7 +16,7 @@ public class GameServiceTests {
     private static UserService userService;
 
     @BeforeAll
-    public static void createDatabase() {
+    public static void createDatabaseGame() {
         databaseService = new DatabaseService(new MemoryAuthDataDAO(), new MemoryUserDataDAO(), new MemoryGameDataDAO());
         gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
         userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
