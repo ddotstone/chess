@@ -26,16 +26,20 @@ public class ChessBoard {
         }
     }
 
+    public static boolean isOnBoard(int row, int col) {
+        return ((row >= 1) && (col >= 1) && (row <= 8) && (col <= 8));
+    }
+
     @Override
     public int hashCode() {
-        int hash_code = 0;
+        int hashCode = 0;
         for (int row = 0; row < N_ROWS; row++) {
             for (int col = 0; col < N_COLS; col++) {
-                int hash_piece = this.board[row][col] == null ? 0 : this.board[row][col].hashCode();
-                hash_code += hash_piece;
+                int hashPiece = this.board[row][col] == null ? 0 : this.board[row][col].hashCode();
+                hashCode += hashPiece;
             }
         }
-        return 71 * hash_code;
+        return 71 * hashCode;
     }
 
     @Override
@@ -45,9 +49,12 @@ public class ChessBoard {
         ChessBoard that = (ChessBoard) obj;
         for (int row = 0; row < N_ROWS; row++) {
             for (int col = 0; col < N_COLS; col++) {
-                boolean is_equal = this.board[row][col] == null ?
+                boolean isEqual = this.board[row][col] == null ?
                         that.board[row][col] == null :
                         this.board[row][col].equals(that.board[row][col]);
+                if (!isEqual) {
+                    return false;
+                }
             }
         }
         return true;
@@ -107,9 +114,9 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        StringBuilder string_board = new StringBuilder();
+        StringBuilder stringBoard = new StringBuilder();
         for (int row = N_ROWS - 1; row >= 0; row--) {
-            string_board.append('|');
+            stringBoard.append('|');
             for (int col = 0; col < N_COLS; col++) {
                 String piece;
                 if (this.board[row][col] == null) {
@@ -128,11 +135,11 @@ public class ChessBoard {
                         piece = piece.toLowerCase();
                     }
                 }
-                string_board.append(piece);
-                string_board.append('|');
+                stringBoard.append(piece);
+                stringBoard.append('|');
             }
-            string_board.append("\n");
+            stringBoard.append("\n");
         }
-        return string_board.toString();
+        return stringBoard.toString();
     }
 }

@@ -7,7 +7,7 @@ package chess;
 
 public record ChessMovePatterns(int row_diff, int col_diff, boolean canTake, boolean canRepeat,
                                 boolean needTakeToMove) {
-    public ChessMovePatterns(int row_diff, int col_diff, boolean canTake, boolean canRepeat) {
-        this(row_diff, col_diff, canTake, canRepeat, false);
+    public ChessMovePatterns(int rowDiff, int colDiff, boolean canTake, boolean canRepeat) {
+        this(rowDiff, colDiff, canTake, canRepeat, false);
     }
 }

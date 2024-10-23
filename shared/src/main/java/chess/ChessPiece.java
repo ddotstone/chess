@@ -177,8 +177,8 @@ public class ChessPiece {
                     myPosition.getColumn()));
             ChessPosition ahead2Square = new ChessPosition(myPosition.getRow() + 2 * rowMultiplier,
                     myPosition.getColumn());
-            ChessPiece ahead_2 = board.getPiece(ahead2Square);
-            if (ahead1 == null && ahead_2 == null) {
+            ChessPiece ahead2 = board.getPiece(ahead2Square);
+            if (ahead1 == null && ahead2 == null) {
                 possibleMoves.add(new ChessMove(myPosition, ahead2Square, null));
             }
         }

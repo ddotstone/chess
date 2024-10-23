@@ -17,7 +17,7 @@ public class Server {
 
         // Register your endpoints and handle exceptions here.
         this.registerErrorHandler();
-        this.RegisterHandlers();
+        this.registerHandlers();
 
         //This line initializes the server and can be removed once you have a functioning endpoint 
         Spark.init();
@@ -32,7 +32,7 @@ public class Server {
     }
 
 
-    private void RegisterHandlers() {
+    private void registerHandlers() {
 
         // Session Handlers
         Spark.post("/session", (req, res) -> (new SessionHandler()).loginHandler(req, res));
