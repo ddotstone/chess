@@ -42,7 +42,9 @@ public class ChessPosition {
         if (obj == this) {
             return true;
         }
-        if (obj == null || this.getClass() != obj.getClass()) return false;
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
         ChessPosition that = (ChessPosition) obj;
         return ((this.row == that.row) && (this.col == that.col));
     }

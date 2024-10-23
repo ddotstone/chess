@@ -56,6 +56,7 @@ public class GameServiceTests {
         });
     }
 
+    @Test
     public void testListGame() throws DataAccessException {
 
         // Register User
@@ -83,6 +84,7 @@ public class GameServiceTests {
         });
     }
 
+    @Test
     public void testUpdateGame() throws DataAccessException {
 
         // Register User
@@ -101,7 +103,7 @@ public class GameServiceTests {
         Assertions.assertEquals(listGameResponse.games().iterator().next().gameName(), "game");
 
         // Join Game
-        JoinGameRequest joinGameRequest = new JoinGameRequest(1, ChessGame.TeamColor.BLACK);
+        JoinGameRequest joinGameRequest = new JoinGameRequest(createGameResponse.gameID(), ChessGame.TeamColor.BLACK);
         gameService.joinGame(registerResponse.authToken(), joinGameRequest);
 
         // List Game

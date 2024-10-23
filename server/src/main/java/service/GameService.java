@@ -43,6 +43,7 @@ public class GameService {
         }
 
         GameData currGame = gameDataDAO.getGame(joinGameRequest.gameID());
+
         if (currGame == null) {
             throw new BadRequestException();
         }

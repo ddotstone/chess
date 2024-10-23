@@ -55,9 +55,12 @@ public class ChessMove extends Object {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
         ChessMove that = (ChessMove) obj;
         return ((that.startPosition.equals(this.startPosition)) &&
                 (that.endPosition.equals(this.endPosition)) &&

@@ -44,8 +44,12 @@ public class ChessBoard {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || this.getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
         ChessBoard that = (ChessBoard) obj;
         for (int row = 0; row < N_ROWS; row++) {
             for (int col = 0; col < N_COLS; col++) {

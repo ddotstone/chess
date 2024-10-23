@@ -5,7 +5,7 @@ package chess;
  * <p>
  */
 
-public record ChessMovePatterns(int row_diff, int col_diff, boolean canTake, boolean canRepeat,
+public record ChessMovePatterns(int rowDiff, int colDiff, boolean canTake, boolean canRepeat,
                                 boolean needTakeToMove) {
     public ChessMovePatterns(int rowDiff, int colDiff, boolean canTake, boolean canRepeat) {
         this(rowDiff, colDiff, canTake, canRepeat, false);

@@ -26,8 +26,12 @@ public class ChessPiece {
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || this.getClass() != obj.getClass()) return false;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || this.getClass() != obj.getClass()) {
+            return false;
+        }
         ChessPiece that = (ChessPiece) obj;
         return ((this.teamColor == that.teamColor) && (this.pieceType == that.pieceType));
     }
@@ -239,8 +243,8 @@ public class ChessPiece {
             int currCol = myPosition.getColumn();
             ChessPiece pieceInSquare;
             do {
-                currRow += colorMultiplier * movePattern.row_diff();
-                currCol += colorMultiplier * movePattern.col_diff();
+                currRow += colorMultiplier * movePattern.rowDiff();
+                currCol += colorMultiplier * movePattern.colDiff();
 
                 if (currRow > ChessBoard.N_ROWS || currCol > ChessBoard.N_COLS) {
                     break;
