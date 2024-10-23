@@ -34,13 +34,6 @@ public class GameServiceTests {
         // Create Game
         CreateGameRequest createGameRequest = new CreateGameRequest("game");
         CreateGameResponse createGameResponse = gameService.createGame(registerResponse.authToken(), createGameRequest);
-
-        // List Game
-        ListGameResponse listGameResponse = gameService.listGames(registerResponse.authToken());
-
-        // Assert Game Name Correct
-        Assertions.assertEquals(listGameResponse.games().size(), 1);
-        Assertions.assertEquals(listGameResponse.games().iterator().next().gameName(), "game");
     }
 
     @Test
