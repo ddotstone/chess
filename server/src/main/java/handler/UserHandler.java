@@ -1,12 +1,11 @@
 package handler;
 
+import static handler.HandlerUnitFunctions.*;
+
 import dataaccess.*;
 import request.*;
 import response.*;
 import service.UserService;
-
-import static handler.HandlerUnitFunctions.*;
-
 import spark.Request;
 import spark.Response;
 

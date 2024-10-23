@@ -6,8 +6,6 @@ import service.DatabaseService;
 import spark.Request;
 import spark.Response;
 
-import java.util.Map;
-
 public class DatabaseHandler {
     public Object ClearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;

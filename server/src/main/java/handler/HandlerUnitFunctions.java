@@ -2,10 +2,10 @@ package handler;
 
 import com.google.gson.Gson;
 import dataaccess.BadRequestException;
+import dataaccess.DataAccessException;
 
 import java.lang.reflect.Type;
 
-import dataaccess.DataAccessException;
 import spark.Request;
 
 public class HandlerUnitFunctions {

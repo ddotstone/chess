@@ -1,12 +1,8 @@
 package handler;
 
-import dataaccess.BadRequestException;
-import dataaccess.DataAccessException;
-import dataaccess.MemoryAuthDataDAO;
-import dataaccess.MemoryUserDataDAO;
-
 import static handler.HandlerUnitFunctions.*;
 
+import dataaccess.*;
 import request.*;
 import response.*;
 import spark.Request;
