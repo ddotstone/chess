@@ -9,9 +9,13 @@ import request.*;
 import response.*;
 
 public class UserServiceTests {
-    private static DatabaseService databaseService;
-    private static GameService gameService;
-    private static UserService userService;
+    private static DatabaseService databaseService = new DatabaseService(new MemoryAuthDataDAO(),
+            new MemoryUserDataDAO(),
+            new MemoryGameDataDAO());
+    private static GameService gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
+    ;
+    private static UserService userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
+    ;
 
     @BeforeAll
     public static void createDatabaseUser() {

@@ -222,17 +222,7 @@ public class ChessGame {
         if (!isInCheck(teamColor)) {
             return false;
         }
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPiece currPiece = this.board.getPiece(new ChessPosition(row, col));
-                if (currPiece != null && currPiece.getTeamColor() == teamColor) {
-                    if (validMoves(new ChessPosition(row, col)).size() > 0) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return noValidMoves(teamColor);
     }
 
     /**
@@ -246,17 +236,7 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
-        for (int row = 1; row <= 8; row++) {
-            for (int col = 1; col <= 8; col++) {
-                ChessPiece currPiece = this.board.getPiece(new ChessPosition(row, col));
-                if (currPiece != null && currPiece.getTeamColor() == teamColor) {
-                    if (validMoves(new ChessPosition(row, col)).size() > 0) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
+        return noValidMoves(teamColor);
     }
 
     private boolean checkFirstObstacle(ChessPosition start,
@@ -298,18 +278,30 @@ public class ChessGame {
             ChessPiece endPiece = board.getPiece(new ChessPosition(row, col));
             if (endPiece.getTeamColor() != color) {
                 for (ChessPiece.PieceType piece : pieceChecks) {
-                    if (piece == endPiece.getPieceType()) {
-                        if (!(piece == ChessPiece.PieceType.KING ||
-                                piece == ChessPiece.PieceType.PAWN ||
-                                piece == ChessPiece.PieceType.KNIGHT) ||
-                                iterations == 1) {
-                            return true;
-                        }
+                    if (piece == endPiece.getPieceType() && (!(piece == ChessPiece.PieceType.KING ||
+                            piece == ChessPiece.PieceType.PAWN ||
+                            piece == ChessPiece.PieceType.KNIGHT) ||
+                            iterations == 1)) {
+                        return true;
                     }
                 }
             }
         }
         return false;
+    }
+
+    private boolean noValidMoves(TeamColor teamColor) {
+        for (int row = 1; row <= 8; row++) {
+            for (int col = 1; col <= 8; col++) {
+                ChessPiece currPiece = this.board.getPiece(new ChessPosition(row, col));
+                if (currPiece != null && currPiece.getTeamColor() == teamColor) {
+                    if (validMoves(new ChessPosition(row, col)).size() > 0) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     /**

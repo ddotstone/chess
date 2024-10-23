@@ -8,16 +8,13 @@ import request.*;
 import response.*;
 
 public class DatabaseServiceTests {
-    private static DatabaseService databaseService;
-    private static GameService gameService;
-    private static UserService userService;
-
-    @BeforeAll
-    public static void createDatabaseDatabase() {
-        databaseService = new DatabaseService(new MemoryAuthDataDAO(), new MemoryUserDataDAO(), new MemoryGameDataDAO());
-        gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
-        userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
-    }
+    private static DatabaseService databaseService = new DatabaseService(new MemoryAuthDataDAO(),
+            new MemoryUserDataDAO(),
+            new MemoryGameDataDAO());
+    private static GameService gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
+    ;
+    private static UserService userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
+    ;
 
     @Test
     public void testLoadThenClear() throws DataAccessException {
@@ -39,7 +36,6 @@ public class DatabaseServiceTests {
         });
 
         // Assert Authtoken was cleared
-
         RegisterResponse finalRegisterResponse = registerResponse;
         Assertions.assertThrows(UnauthorizedException.class, () -> {
             ListGameResponse listGameResponse = gameService.listGames(finalRegisterResponse.authToken());
