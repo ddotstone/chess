@@ -1,4 +1,4 @@
 package dataaccess;
 
-public class SQLGameDataDAO {
+public class SQLGameDataDAO implements GameDataDAO {
 }
