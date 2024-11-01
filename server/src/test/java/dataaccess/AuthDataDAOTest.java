@@ -51,10 +51,10 @@ public class AuthDataDAOTest {
     public void assertGetToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
-        authDAO.createAuth(new AuthData("111111111", "banana"));
+        authDAO.createAuth(new AuthData("111111111", "username"));
 
         var result = authDAO.getAuth("111111111");
-        Assertions.assertEquals(result.username(), "banana");
+        Assertions.assertEquals(result.username(), "username");
     }
 
     @Test
