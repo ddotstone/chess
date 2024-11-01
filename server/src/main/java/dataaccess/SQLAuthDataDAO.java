@@ -17,10 +17,9 @@ public class SQLAuthDataDAO implements AuthDataDAO {
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  auth (
-              `username` varchar(256) NOT NULL,
               `authtoken` varchar(256) NOT NULL,
-              `json` TEXT DEFAULT NULL,
-              PRIMARY KEY (`username`),
+              `username` varchar(256) NOT NULL,
+              PRIMARY KEY (`authtoken`),
               INDEX(authToken),
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
@@ -31,15 +30,16 @@ public class SQLAuthDataDAO implements AuthDataDAO {
     }
 
     @Override
-    public void clear() {
-        AUTH_DATA_COLLECTION.clear();
+    public void clear() throws DataAccessException {
+        var statement = "TRUNCATE auth";
+        executeUpdate(statement);
     }
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
-        var statement = "INSERT INTO auth (username, authtoken, json) VALUES (?, ?, ?)";
+        var statement = "INSERT INTO auth (authtoken, username, json) VALUES (?, ?, ?)";
         var json = new Gson().toJson(authData);
-        executeUpdate(statement, authData.username(), authData.authToken(), json);
+        executeUpdate(statement, authData.authToken(), authData.username(), json);
         return;
     }
 
@@ -55,15 +55,8 @@ public class SQLAuthDataDAO implements AuthDataDAO {
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
-        Iterator<AuthData> listIterator = AUTH_DATA_COLLECTION.iterator();
-        while (listIterator.hasNext()) {
-            AuthData auth = listIterator.next();
-            if (auth.authToken().equals(authToken)) {
-                listIterator.remove();
-                return;
-            }
-        }
-        throw new UnauthorizedException();
+        var statement = "DELETE FROM auth WHERE authtoken=?";
+        executeUpdate(statement, authToken);
     }
 
     private int executeUpdate(String statement, Object... params) throws DataAccessException {
