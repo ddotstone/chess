@@ -38,6 +38,9 @@ public class SQLAuthDataDAO implements AuthDataDAO {
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
+        if (getAuth(authData.authToken()) != null) {
+            throw new AlreadyTakenException();
+        }
         var statement = "INSERT INTO auth (authtoken, username) VALUES (?, ?)";
         executeUpdate(statement, authData.authToken(), authData.username());
     }

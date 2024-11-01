@@ -60,6 +60,9 @@ public class SQLGameDataDAO implements GameDataDAO {
 
     @Override
     public int createGame(GameData gameData) throws DataAccessException {
+        if (gameData.gameName() == null) {
+            throw new BadRequestException();
+        }
         String json = new Gson().toJson(gameData.game(), ChessGame.class);
         var statement = "INSERT INTO game (whiteusername, blackusername, gamename, game) VALUES (?, ?, ?, ?)";
         return executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), json);

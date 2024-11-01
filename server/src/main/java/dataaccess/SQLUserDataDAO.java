@@ -1,11 +1,8 @@
 package dataaccess;
 
-import chess.ChessGame;
 import model.UserData;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
@@ -36,6 +33,9 @@ public class SQLUserDataDAO implements UserDataDAO {
 
     @Override
     public void createUser(UserData userData) throws DataAccessException {
+        if (userData.username() == null) {
+            throw new BadRequestException();
+        }
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         executeUpdate(statement, userData.username(), userData.password(), userData.email());
     }
