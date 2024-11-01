@@ -2,7 +2,7 @@ package dataaccess;
 
 import model.AuthData;
 
-import static dataaccess.DatabaseManager.simpleStringExecution;
+import static dataaccess.DatabaseManager.executeUpdate;
 import static dataaccess.DatabaseManager.configureDatabase;
 
 public class SQLAuthDataDAO implements AuthDataDAO {
@@ -64,9 +64,4 @@ public class SQLAuthDataDAO implements AuthDataDAO {
         var statement = "DELETE FROM auth WHERE authtoken=?";
         executeUpdate(statement, authToken);
     }
-
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
-        return simpleStringExecution(statement, params);
-    }
-
 }

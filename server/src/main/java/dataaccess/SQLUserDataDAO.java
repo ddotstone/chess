@@ -5,7 +5,7 @@ import model.UserData;
 import java.sql.SQLException;
 
 import static dataaccess.DatabaseManager.configureDatabase;
-import static dataaccess.DatabaseManager.simpleStringExecution;
+import static dataaccess.DatabaseManager.executeUpdate;
 
 public class SQLUserDataDAO implements UserDataDAO {
 
@@ -56,9 +56,5 @@ public class SQLUserDataDAO implements UserDataDAO {
             throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
         }
         return null;
-    }
-
-    private int executeUpdate(String statement, Object... params) throws DataAccessException {
-        return simpleStringExecution(statement, params);
     }
 }
