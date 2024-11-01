@@ -13,7 +13,7 @@ public class GameHandler {
     private final GameService gameService;
 
     public GameHandler() throws DataAccessException {
-        this.gameService = new GameService(new SQLAuthDataDAO(), new MemoryGameDataDAO());
+        this.gameService = new GameService(new SQLAuthDataDAO(), new SQLGameDataDAO());
     }
 
     public Object createGameRequest(Request req, Response res) throws DataAccessException {

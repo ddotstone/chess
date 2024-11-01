@@ -11,7 +11,7 @@ public class DatabaseHandler {
         Gson jsonResponse;
         (new DatabaseService(new SQLAuthDataDAO(),
                 new MemoryUserDataDAO(),
-                new MemoryGameDataDAO())).clear();
+                new SQLGameDataDAO())).clear();
         res.status(200);
         return "{}";
     }

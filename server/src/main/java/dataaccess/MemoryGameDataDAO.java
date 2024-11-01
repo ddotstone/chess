@@ -14,7 +14,7 @@ public class MemoryGameDataDAO implements GameDataDAO {
     @Override
     public void clear() throws DataAccessException {
         GAME_DATA_COLLECTION.clear();
-        gameCount = 0;
+        gameCount = 1;
     }
 
     @Override
@@ -29,7 +29,8 @@ public class MemoryGameDataDAO implements GameDataDAO {
 
     @Override
     public int createGame(GameData gameData) throws DataAccessException {
-        GAME_DATA_COLLECTION.add(gameData);
+        var gameDataFill = new GameData(gameCount, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), gameData.game());
+        GAME_DATA_COLLECTION.add(gameDataFill);
         return gameCount++;
     }
 

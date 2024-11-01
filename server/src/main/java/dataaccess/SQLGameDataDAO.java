@@ -20,16 +20,19 @@ public class SQLGameDataDAO implements GameDataDAO {
             """
             CREATE TABLE IF NOT EXISTS  game (
               `gameid` int NOT NULL AUTO_INCREMENT,
-              'whiteusername' varchar(256) DEFAULT NULL,
-              'blackusername' varchar(256) DEFAULT NULL,
-              'gamename' varchar(256) NOT NULL,
-              'game'  varchar(256) NOT NULL,
+              `whiteusername` varchar(256) DEFAULT NULL,
+              `blackusername` varchar(256) DEFAULT NULL,
+              `gamename` varchar(256) NOT NULL,
+              `game`  varchar(256) NOT NULL,
               PRIMARY KEY (`gameid`),
-              INDEX("gamename"),
-              INDEX(authToken)
+              INDEX(`gamename`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
+
+    public SQLGameDataDAO() throws DataAccessException {
+        configureDatabase();
+    }
 
     @Override
     public void clear() throws DataAccessException {
@@ -58,32 +61,26 @@ public class SQLGameDataDAO implements GameDataDAO {
     @Override
     public int createGame(GameData gameData) throws DataAccessException {
         String json = new Gson().toJson(gameData.game(), ChessGame.class);
-        var statement = "INSERT INTO game (whiteusername, blackusername, gamename, game) VALUES (?, ?, ?, ?, ? )";
+        var statement = "INSERT INTO game (whiteusername, blackusername, gamename, game) VALUES (?, ?, ?, ?)";
         return executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), json);
     }
 
     @Override
     public void updateGame(GameData gameData) throws DataAccessException {
-        int gameID = gameData.gameID();
-
-        GameData gameToUpdate;
-        Iterator<GameData> listIterator = GAME_DATA_COLLECTION.iterator();
-        while (listIterator.hasNext()) {
-            GameData currentGame = listIterator.next();
-            if (currentGame.gameID() == gameData.gameID()) {
-                listIterator.remove();
-                GAME_DATA_COLLECTION.add(gameData);
-                return;
-            }
+        if (getGame(gameData.gameID()) == null) {
+            throw new BadRequestException();
         }
-        throw new UnauthorizedException();
+
+        var statement = "UPDATE game SET whiteusername=?, blackusername=?, gamename=?, game=? WHERE gameid=?";
+        String gameJson = new Gson().toJson(gameData.game(), ChessGame.class);
+        executeUpdate(statement, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), gameJson, gameData.gameID());
     }
 
     @Override
     public Collection<GameData> listGames() throws DataAccessException {
         var result = new ArrayList<GameData>();
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT id, json FROM pet";
+            var statement = "SELECT gameid, whiteusername, blackusername, gamename, game FROM game";
             try (var ps = conn.prepareStatement(statement)) {
                 try (var rs = ps.executeQuery()) {
                     while (rs.next()) {
