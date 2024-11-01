@@ -12,8 +12,8 @@ import static handler.HandlerUnitFunctions.*;
 public class GameHandler {
     private final GameService gameService;
 
-    public GameHandler() {
-        this.gameService = new GameService(new MemoryAuthDataDAO(), new MemoryGameDataDAO());
+    public GameHandler() throws DataAccessException {
+        this.gameService = new GameService(new SQLAuthDataDAO(), new MemoryGameDataDAO());
     }
 
     public Object createGameRequest(Request req, Response res) throws DataAccessException {

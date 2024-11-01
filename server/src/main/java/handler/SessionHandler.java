@@ -12,8 +12,8 @@ import service.UserService;
 public class SessionHandler {
     private final UserService userService;
 
-    public SessionHandler() {
-        this.userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
+    public SessionHandler() throws DataAccessException {
+        this.userService = new UserService(new MemoryUserDataDAO(), new SQLAuthDataDAO());
     }
 
     public Object loginHandler(Request req, Response res) throws DataAccessException {

@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.AuthData;
 import dataaccess.DatabaseManager;
 
@@ -20,7 +21,7 @@ public class SQLAuthDataDAO implements AuthDataDAO {
               `authtoken` varchar(256) NOT NULL,
               `username` varchar(256) NOT NULL,
               PRIMARY KEY (`authtoken`),
-              INDEX(authToken),
+              INDEX(authToken)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
             """
     };
@@ -37,24 +38,34 @@ public class SQLAuthDataDAO implements AuthDataDAO {
 
     @Override
     public void createAuth(AuthData authData) throws DataAccessException {
-        var statement = "INSERT INTO auth (authtoken, username, json) VALUES (?, ?, ?)";
-        var json = new Gson().toJson(authData);
-        executeUpdate(statement, authData.authToken(), authData.username(), json);
-        return;
+        var statement = "INSERT INTO auth (authtoken, username) VALUES (?, ?)";
+        executeUpdate(statement, authData.authToken(), authData.username());
     }
 
     @Override
     public AuthData getAuth(String authToken) throws DataAccessException {
-        for (AuthData auth : AUTH_DATA_COLLECTION) {
-            if (auth.authToken().equals(authToken)) {
-                return auth;
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT username FROM auth WHERE authtoken=?";
+            try (var ps = conn.prepareStatement(statement)) {
+                ps.setString(1, authToken);
+                try (var rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        String username = rs.getString("username");
+                        return new AuthData(authToken, rs.getString("username"));
+                    }
+                }
             }
+        } catch (Exception e) {
+            throw new DataAccessException(String.format("Unable to read data: %s", e.getMessage()));
         }
         return null;
     }
 
     @Override
     public void deleteAuth(String authToken) throws DataAccessException {
+        if (getAuth(authToken) == null) {
+            throw new UnauthorizedException();
+        }
         var statement = "DELETE FROM auth WHERE authtoken=?";
         executeUpdate(statement, authToken);
     }

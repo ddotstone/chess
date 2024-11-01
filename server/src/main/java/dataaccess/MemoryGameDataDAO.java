@@ -9,10 +9,12 @@ import java.util.Iterator;
 public class MemoryGameDataDAO implements GameDataDAO {
 
     public static final Collection<GameData> GAME_DATA_COLLECTION = new ArrayList<>();
+    private static int gameCount = 1;
 
     @Override
     public void clear() throws DataAccessException {
         GAME_DATA_COLLECTION.clear();
+        gameCount = 0;
     }
 
     @Override
@@ -26,8 +28,9 @@ public class MemoryGameDataDAO implements GameDataDAO {
     }
 
     @Override
-    public void createGame(GameData gameData) throws DataAccessException {
+    public int createGame(GameData gameData) throws DataAccessException {
         GAME_DATA_COLLECTION.add(gameData);
+        return gameCount++;
     }
 
     @Override

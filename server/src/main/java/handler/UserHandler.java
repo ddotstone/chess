@@ -13,8 +13,8 @@ import spark.Response;
 public class UserHandler {
     private final UserService userService;
 
-    public UserHandler() {
-        this.userService = new UserService(new MemoryUserDataDAO(), new MemoryAuthDataDAO());
+    public UserHandler() throws DataAccessException {
+        this.userService = new UserService(new MemoryUserDataDAO(), new SQLAuthDataDAO());
     }
 
     public Object registerHandler(Request req, Response res) throws DataAccessException {

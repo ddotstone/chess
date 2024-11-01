@@ -9,7 +9,7 @@ import spark.Response;
 public class DatabaseHandler {
     public Object clearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;
-        (new DatabaseService(new MemoryAuthDataDAO(),
+        (new DatabaseService(new SQLAuthDataDAO(),
                 new MemoryUserDataDAO(),
                 new MemoryGameDataDAO())).clear();
         res.status(200);

@@ -7,7 +7,6 @@ import request.*;
 import response.*;
 
 public class GameService {
-    private static int gameCount = 1;
     private final AuthDataDAO authDataDAO;
     private final GameDataDAO gameDataDAO;
 
@@ -27,13 +26,13 @@ public class GameService {
         if (authDataDAO.getAuth(authToken) == null) {
             throw new UnauthorizedException();
         }
-        GameData game = new GameData(gameCount,
+        GameData game = new GameData(0,
                 null,
                 null,
                 createGameRequest.gameName(),
                 null);
-        gameDataDAO.createGame(game);
-        return new CreateGameResponse(gameCount++);
+        int gameID = gameDataDAO.createGame(game);
+        return new CreateGameResponse(gameID);
     }
 
     public void joinGame(String authToken, JoinGameRequest joinGameRequest) throws DataAccessException {
