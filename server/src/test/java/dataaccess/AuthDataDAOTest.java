@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static dataaccess.DAOTestHelper.ClearDatabase;
+import static dataaccess.DAOTestHelper.clearDatabase;
 
 public class AuthDataDAOTest {
     @BeforeEach
-    public void ClearData() throws DataAccessException {
-        ClearDatabase();
+    public void clearDataAuth() throws DataAccessException {
+        clearDatabase();
     }
 
     @Test
-    public void AssertClear() throws DataAccessException {
+    public void assertClear() throws DataAccessException {
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));
 
@@ -25,7 +25,7 @@ public class AuthDataDAOTest {
     }
 
     @Test
-    public void AssertAddToken() throws DataAccessException {
+    public void assertAddToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));
@@ -36,7 +36,7 @@ public class AuthDataDAOTest {
 
 
     @Test
-    public void AssertFailDuplicateAuth() throws DataAccessException {
+    public void assertFailDuplicateAuth() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));
@@ -48,7 +48,7 @@ public class AuthDataDAOTest {
     }
 
     @Test
-    public void AssertGetToken() throws DataAccessException {
+    public void assertGetToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));
@@ -58,7 +58,7 @@ public class AuthDataDAOTest {
     }
 
     @Test
-    public void AssertFailGetToken() throws DataAccessException {
+    public void assertFailGetToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         var result = authDAO.getAuth("111111111");
@@ -66,7 +66,7 @@ public class AuthDataDAOTest {
     }
 
     @Test
-    public void AssertDeleteToken() throws DataAccessException {
+    public void assertDeleteToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));
@@ -79,7 +79,7 @@ public class AuthDataDAOTest {
 
 
     @Test
-    public void AssertInvalidDeleteFailToken() throws DataAccessException {
+    public void assertInvalidDeleteFailToken() throws DataAccessException {
 
         var authDAO = new SQLAuthDataDAO();
         authDAO.createAuth(new AuthData("111111111", "banana"));

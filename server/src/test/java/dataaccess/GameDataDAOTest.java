@@ -8,16 +8,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static dataaccess.DAOTestHelper.ClearDatabase;
+import static dataaccess.DAOTestHelper.clearDatabase;
 
 public class GameDataDAOTest {
     @BeforeEach
-    public void ClearData() throws DataAccessException {
-        ClearDatabase();
+    public void clearDataGame() throws DataAccessException {
+        clearDatabase();
     }
 
     @Test
-    public void AssertClear() throws DataAccessException {
+    public void assertClear() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
 
@@ -31,7 +31,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertAddGame() throws DataAccessException {
+    public void assertAddGame() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
 
@@ -41,7 +41,7 @@ public class GameDataDAOTest {
 
 
     @Test
-    public void AssertFailAddGame() throws DataAccessException {
+    public void assertFailAddGame() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         Assertions.assertThrows(BadRequestException.class, () -> {
             gameDAO.createGame(new GameData(0, "a", "b", null, new ChessGame()));
@@ -49,7 +49,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertListGame() throws DataAccessException {
+    public void assertListGame() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
         id = gameDAO.createGame(new GameData(0, "a", "b", "newGame1", new ChessGame()));
@@ -60,7 +60,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertListGameAfterClear() throws DataAccessException {
+    public void assertListGameAfterClear() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
         id = gameDAO.createGame(new GameData(0, "a", "b", "newGame1", new ChessGame()));
@@ -73,7 +73,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertGetGame() throws DataAccessException {
+    public void assertGetGame() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
         id = gameDAO.createGame(new GameData(0, "a", "b", "newGame1", new ChessGame()));
@@ -84,7 +84,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertBadIDFail() throws DataAccessException {
+    public void assertBadIDFail() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
         id = gameDAO.createGame(new GameData(0, "a", "b", "newGame1", new ChessGame()));
@@ -95,7 +95,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertUpdateGame() throws DataAccessException {
+    public void assertUpdateGame() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         int id = gameDAO.createGame(new GameData(0, "a", "b", "newGame", new ChessGame()));
 
@@ -107,7 +107,7 @@ public class GameDataDAOTest {
     }
 
     @Test
-    public void AssertBadIDUpdateFail() throws DataAccessException {
+    public void assertBadIDUpdateFail() throws DataAccessException {
         var gameDAO = new SQLGameDataDAO();
         Assertions.assertThrows(BadRequestException.class, () -> {
             gameDAO.updateGame(new GameData(7, "z", "y", "changedName", null));

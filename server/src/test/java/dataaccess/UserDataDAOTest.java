@@ -5,17 +5,17 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static dataaccess.DAOTestHelper.ClearDatabase;
+import static dataaccess.DAOTestHelper.clearDatabase;
 
 public class UserDataDAOTest {
 
     @BeforeEach
-    public void ClearData() throws DataAccessException {
-        ClearDatabase();
+    public void clearDataUser() throws DataAccessException {
+        clearDatabase();
     }
 
     @Test
-    public void AssertCreateUser() throws DataAccessException {
+    public void assertCreateUser() throws DataAccessException {
         var userDao = new SQLUserDataDAO();
 
         userDao.createUser(new UserData("user", "password", "email"));
@@ -24,7 +24,7 @@ public class UserDataDAOTest {
     }
 
     @Test
-    public void AssertNullUsernameFail() throws DataAccessException {
+    public void assertNullUsernameFail() throws DataAccessException {
         var userDao = new SQLUserDataDAO();
         Assertions.assertThrows(BadRequestException.class, () -> {
             userDao.createUser(new UserData(null, "password", "email"));
@@ -32,7 +32,7 @@ public class UserDataDAOTest {
     }
 
     @Test
-    public void AssertGetUsername() throws DataAccessException {
+    public void assertGetUsername() throws DataAccessException {
         var userDao = new SQLUserDataDAO();
 
         userDao.createUser(new UserData("newuser", "password", "email"));
@@ -41,7 +41,7 @@ public class UserDataDAOTest {
     }
 
     @Test
-    public void AssertBadUsernameFail() throws DataAccessException {
+    public void assertBadUsernameFail() throws DataAccessException {
         var userDao = new SQLUserDataDAO();
 
         userDao.createUser(new UserData("newuser", "password", "email"));
