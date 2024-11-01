@@ -3,6 +3,7 @@ package service;
 import model.UserData;
 import model.AuthData;
 import dataaccess.*;
+import org.mindrot.jbcrypt.BCrypt;
 import request.*;
 import response.*;
 
@@ -24,8 +25,10 @@ public class UserService {
         }
         AuthData authData = new AuthData(getUUID(), registerRequest.username());
         authDataDAO.createAuth(authData);
+
+        String hashedPassword = BCrypt.hashpw(registerRequest.password(), BCrypt.gensalt());
         UserData user = new UserData(registerRequest.username(),
-                registerRequest.password(),
+                hashedPassword,
                 registerRequest.email());
 
         userDataDAO.createUser(user);
@@ -37,7 +40,7 @@ public class UserService {
         if (userStored == null) {
             throw new UnauthorizedException();
         }
-        if (!userStored.password().equals(loginRequest.password())) {
+        if (!BCrypt.checkpw(loginRequest.password(), userStored.password())) {
             throw new UnauthorizedException();
         }
 

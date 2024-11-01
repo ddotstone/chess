@@ -14,7 +14,7 @@ public class UserHandler {
     private final UserService userService;
 
     public UserHandler() throws DataAccessException {
-        this.userService = new UserService(new MemoryUserDataDAO(), new SQLAuthDataDAO());
+        this.userService = new UserService(new SQLUserDataDAO(), new SQLAuthDataDAO());
     }
 
     public Object registerHandler(Request req, Response res) throws DataAccessException {

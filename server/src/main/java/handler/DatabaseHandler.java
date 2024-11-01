@@ -10,7 +10,7 @@ public class DatabaseHandler {
     public Object clearRequest(Request req, Response res) throws DataAccessException {
         Gson jsonResponse;
         (new DatabaseService(new SQLAuthDataDAO(),
-                new MemoryUserDataDAO(),
+                new SQLUserDataDAO(),
                 new SQLGameDataDAO())).clear();
         res.status(200);
         return "{}";
