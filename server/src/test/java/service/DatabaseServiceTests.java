@@ -4,8 +4,8 @@ import dataaccess.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import request.*;
-import response.*;
+import model.request.*;
+import model.response.*;
 
 public class DatabaseServiceTests {
     private static DatabaseService databaseService = new DatabaseService(new MemoryAuthDataDAO(),

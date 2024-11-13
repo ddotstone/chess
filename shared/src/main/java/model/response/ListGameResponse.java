@@ -1,8 +1,8 @@
-package response;
-
-import java.util.Collection;
+package model.response;
 
 import model.GameData;
+
+import java.util.Collection;
 
 public record ListGameResponse(Collection<GameData> games) {
     @Override

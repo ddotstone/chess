@@ -1,9 +1,9 @@
 package handler;
 
 import dataaccess.*;
-import request.*;
-import response.*;
 import service.GameService;
+import model.response.*;
+import model.request.*;
 import spark.Request;
 import spark.Response;
 

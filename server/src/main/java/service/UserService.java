@@ -4,8 +4,8 @@ import model.UserData;
 import model.AuthData;
 import dataaccess.*;
 import org.mindrot.jbcrypt.BCrypt;
-import request.*;
-import response.*;
+import model.response.*;
+import model.request.*;
 
 import java.util.UUID;
 

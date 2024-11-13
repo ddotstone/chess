@@ -3,8 +3,8 @@ package handler;
 import static handler.HandlerUnitFunctions.*;
 
 import dataaccess.*;
-import request.*;
-import response.*;
+import model.response.*;
+import model.request.*;
 import spark.Request;
 import spark.Response;
 import service.UserService;

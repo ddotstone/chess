@@ -3,8 +3,8 @@ package service;
 import chess.ChessGame;
 import dataaccess.*;
 import model.*;
-import request.*;
-import response.*;
+import model.response.*;
+import model.request.*;
 
 public class GameService {
     private final AuthDataDAO authDataDAO;

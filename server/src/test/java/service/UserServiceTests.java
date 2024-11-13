@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import dataaccess.*;
-import request.*;
-import response.*;
+import model.request.*;
+import model.response.*;
 
 public class UserServiceTests {
     private static DatabaseService databaseService = new DatabaseService(new MemoryAuthDataDAO(),

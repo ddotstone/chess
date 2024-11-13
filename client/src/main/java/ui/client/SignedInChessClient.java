@@ -6,13 +6,18 @@ import exception.ResponseException;
 import server.ServerFacade;
 import model.AuthData;
 
-public class SignedOutChessClient {
+public class SignedInChessClient {
     String authToken;
     ServerFacade serverFacade;
 
-    public SignedOutChessClient(String url) {
+    public SignedInChessClient(String url) {
         serverFacade = new ServerFacade(url);
         authToken = null;
+    }
+
+    public SignedInChessClient(SignedOutChessClient copy) {
+        this.authToken = copy.authToken;
+        this.serverFacade = copy.serverFacade;
     }
 
     public String eval(String input) {
@@ -21,8 +26,10 @@ public class SignedOutChessClient {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "signin" -> signIn(params);
-                case "rescue" -> register(params);
+                case "signOut" -> signIn(params);
+                case "clear" -> register(params);
+                case "createGame" -> register(params);
+                case "joinGame" -> register(params);
                 case "quit" -> "quit";
                 default -> help();
             };

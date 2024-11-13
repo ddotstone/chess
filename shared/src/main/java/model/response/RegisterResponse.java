@@ -1,9 +1,9 @@
-package response;
+package model.response;
 
-public record LoginResponse(String username, String authToken) {
+public record RegisterResponse(String username, String authToken) {
     @Override
     public String toString() {
-        return "LoginResponse{" +
+        return "RegisterResponse{" +
                 "username='" + username + '\'' +
                 ", authToken='" + authToken + '\'' +
                 '}';
