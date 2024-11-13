@@ -53,6 +53,7 @@ public class SignedInChessClient implements ChessClient {
 
     private String signOut(String... params) throws ResponseException {
         serverFacade.signOut(authToken);
+        transferClass = SignedOutChessClient.class;
         return "signed out";
     }
 
@@ -78,13 +79,13 @@ public class SignedInChessClient implements ChessClient {
             ChessGame.TeamColor teamColorEnum;
             try {
                 gameIDInt = Integer.parseInt(gameID);
-                teamColorEnum = ChessGame.TeamColor.valueOf(teamColor);
+                teamColorEnum = ChessGame.TeamColor.valueOf(teamColor.toUpperCase());
             } catch (Exception ex) {
                 throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
             }
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
-            return String.format("joined game %s as %s", teamColor);
+            return String.format("joined game %s as %s\n", gameIDInt, teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
     }
@@ -109,6 +110,7 @@ public class SignedInChessClient implements ChessClient {
             result.append(game.blackUsername());
             result.append("\n");
             result.append("\n");
+            i++;
         }
         lastList = orderedGames;
         return result.toString();
@@ -118,7 +120,7 @@ public class SignedInChessClient implements ChessClient {
         if (params.length == 1) {
             String gameID = params[0];
             transferClass = InGameChessClient.class;
-            return String.format("watching game %s", gameID);
+            return String.format("watching game %s\n", gameID);
         }
         throw new ResponseException(400, "Expected: watch <GAME ID>");
     }

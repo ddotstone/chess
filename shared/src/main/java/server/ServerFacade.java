@@ -82,7 +82,7 @@ public class ServerFacade {
     public void joinGame(String authToken, int gameID, ChessGame.TeamColor teamColor) throws ResponseException {
         var path = "/game";
         JoinGameRequest request = new JoinGameRequest(gameID, teamColor);
-        this.makeRequest("PUT", path, null, authToken, null);
+        this.makeRequest("PUT", path, request, authToken, null);
     }
 
     public Collection<GameData> listGames(String authToken) throws ResponseException {
@@ -103,10 +103,10 @@ public class ServerFacade {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
-            http.setDoOutput(true);
 
-            writeBody(request, http);
             addAuth(auth, http);
+            http.setDoOutput(true);
+            writeBody(request, http);
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);

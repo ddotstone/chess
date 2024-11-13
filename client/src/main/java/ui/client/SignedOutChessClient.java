@@ -51,7 +51,7 @@ public class SignedOutChessClient implements ChessClient {
             this.authToken = authData.authToken();
             transferClass = SignedInChessClient.class;
 
-            return String.format("signed in as: %s\n", username);
+            return String.format("signed in as: %s", username);
         }
         throw new ResponseException(400, "Expected: signIn <username> <password>");
     }
@@ -64,7 +64,7 @@ public class SignedOutChessClient implements ChessClient {
             AuthData authData = serverFacade.register(username, password, email);
             this.authToken = authData.authToken();
             transferClass = SignedInChessClient.class;
-            return String.format("registered as: %s\n", username);
+            return String.format("registered as: %s", username);
         }
         throw new ResponseException(400, "Expected: register <username> <password> <email>");
     }
