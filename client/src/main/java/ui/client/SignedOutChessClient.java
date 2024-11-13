@@ -6,13 +6,25 @@ import exception.ResponseException;
 import server.ServerFacade;
 import model.AuthData;
 
-public class SignedOutChessClient {
+public class SignedOutChessClient implements ChessClient {
     String authToken;
     ServerFacade serverFacade;
+    Class transferClass;
 
     public SignedOutChessClient(String url) {
         serverFacade = new ServerFacade(url);
         authToken = null;
+    }
+
+
+    public SignedOutChessClient(SignedInChessClient copy) {
+        this.authToken = copy.authToken;
+        this.serverFacade = copy.serverFacade;
+    }
+
+    public SignedOutChessClient(InGameChessClient copy) {
+        this.authToken = copy.authToken;
+        this.serverFacade = copy.serverFacade;
     }
 
     public String eval(String input) {
@@ -21,8 +33,8 @@ public class SignedOutChessClient {
             var cmd = (tokens.length > 0) ? tokens[0] : "help";
             var params = Arrays.copyOfRange(tokens, 1, tokens.length);
             return switch (cmd) {
-                case "signin" -> signIn(params);
-                case "rescue" -> register(params);
+                case "login" -> signIn(params);
+                case "register" -> register(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -32,24 +44,27 @@ public class SignedOutChessClient {
     }
 
     private String signIn(String... params) throws ResponseException {
-        if (params.length >= 2) {
+        if (params.length == 2) {
             String username = params[0];
             String password = params[1];
             AuthData authData = serverFacade.signIn(username, password);
             this.authToken = authData.authToken();
-            return String.format("signed in as: %s", username);
+            transferClass = SignedInChessClient.class;
+
+            return String.format("signed in as: %s\n", username);
         }
         throw new ResponseException(400, "Expected: signIn <username> <password>");
     }
 
     private String register(String... params) throws ResponseException {
-        if (params.length >= 3) {
+        if (params.length == 3) {
             String username = params[0];
             String password = params[1];
             String email = params[2];
             AuthData authData = serverFacade.register(username, password, email);
             this.authToken = authData.authToken();
-            return String.format("registered as: %s", username);
+            transferClass = SignedInChessClient.class;
+            return String.format("registered as: %s\n", username);
         }
         throw new ResponseException(400, "Expected: register <username> <password> <email>");
     }
@@ -61,5 +76,9 @@ public class SignedOutChessClient {
                 Register a new user: "register" <USERNAME> <PASSWORD> <EMAIL>
                 Quit: "quit"
                 """;
+    }
+
+    public Class transferStates() {
+        return transferClass;
     }
 }

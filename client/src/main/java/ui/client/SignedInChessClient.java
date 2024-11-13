@@ -1,5 +1,6 @@
 package ui.client;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -8,10 +9,11 @@ import exception.ResponseException;
 import server.ServerFacade;
 import model.GameData;
 
-public class SignedInChessClient {
+public class SignedInChessClient implements ChessClient {
     String authToken;
     ServerFacade serverFacade;
     Class transferClass;
+    Collection<GameData> lastList;
 
     public SignedInChessClient(String url) {
         serverFacade = new ServerFacade(url);
@@ -22,6 +24,12 @@ public class SignedInChessClient {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
     }
+
+    public SignedInChessClient(InGameChessClient copy) {
+        this.authToken = copy.authToken;
+        this.serverFacade = copy.serverFacade;
+    }
+
 
     public String eval(String input) {
         try {
@@ -54,7 +62,7 @@ public class SignedInChessClient {
     }
 
     private String createGame(String... params) throws ResponseException {
-        if (params.length >= 1) {
+        if (params.length == 1) {
             String gameName = params[0];
             int gameID = serverFacade.createGame(authToken, gameName);
             return String.format("created game %s", gameName);
@@ -63,7 +71,7 @@ public class SignedInChessClient {
     }
 
     private String joinGame(String... params) throws ResponseException {
-        if (params.length >= 2) {
+        if (params.length == 2) {
             String gameID = params[0];
             String teamColor = params[1];
             int gameIDInt;
@@ -75,6 +83,7 @@ public class SignedInChessClient {
                 throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
             }
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
+            transferClass = InGameChessClient.class;
             return String.format("joined game %s as %s", teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
@@ -82,17 +91,33 @@ public class SignedInChessClient {
 
     private String listGames(String... params) throws ResponseException {
         Collection<GameData> games = serverFacade.listGames(authToken);
+        ArrayList<GameData> orderedGames = new ArrayList<>();
         StringBuilder result = new StringBuilder("Games:\n");
+        int i = 0;
         for (GameData game : games) {
-            result.append(game.toString());
+            orderedGames.add(game);
+            result.append("\tGame: ");
+            result.append(game.gameName());
+            result.append("\n");
+            result.append("\tID: ");
+            result.append(String.format("%d", i));
+            result.append("\n");
+            result.append("\tWhite: ");
+            result.append(game.whiteUsername());
+            result.append("\n");
+            result.append("\tBlack: ");
+            result.append(game.blackUsername());
+            result.append("\n");
             result.append("\n");
         }
+        lastList = orderedGames;
         return result.toString();
     }
 
     private String watchGame(String... params) throws ResponseException {
-        if (params.length >= 1) {
+        if (params.length == 1) {
             String gameID = params[0];
+            transferClass = InGameChessClient.class;
             return String.format("watching game %s", gameID);
         }
         throw new ResponseException(400, "Expected: watch <GAME ID>");
