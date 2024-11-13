@@ -56,9 +56,10 @@ public class SignedOutChessClient {
 
     public String help() {
         return """
-                - signIn <username> <password>
-                - register <username> <password> <email>
-                - quit
+                Options:
+                Login: "login" <USERNAME> <PASSWORD>
+                Register a new user: "register" <USERNAME> <PASSWORD> <EMAIL>
+                Quit: "quit"
                 """;
     }
 }

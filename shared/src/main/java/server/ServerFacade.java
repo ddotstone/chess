@@ -62,7 +62,7 @@ public class ServerFacade {
         return new AuthData(response.authToken(), username);
     }
 
-    public void logout(String authToken) throws ResponseException {
+    public void signOut(String authToken) throws ResponseException {
         var path = "/session";
         this.makeRequest("DELETE", path, null, authToken, null);
     }
@@ -72,7 +72,7 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, null, null, null);
     }
 
-    public int createGames(String authToken, String gameName) throws ResponseException {
+    public int createGame(String authToken, String gameName) throws ResponseException {
         var path = "/game";
         CreateGameRequest request = new CreateGameRequest(gameName);
         CreateGameResponse response = this.makeRequest("POST", path, request, authToken, CreateGameResponse.class);
