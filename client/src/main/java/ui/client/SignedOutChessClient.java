@@ -26,4 +26,16 @@ public class SignedOutChessClient {
     private String signIn(String... params) throws ResponseException {
 
     }
+
+    private String signIn(String... params) throws ResponseException {
+
+    }
+
+    public String help() {
+        return """
+                - signIn <username> <password>
+                - register <username> <password> <email>
+                - quit
+                """;
+    }
 }
