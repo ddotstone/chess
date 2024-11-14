@@ -80,7 +80,7 @@ public class SignedInChessClient implements ChessClient {
             try {
                 gameIDInt = Integer.parseInt(gameID) - 1;
             } catch (Exception ex) {
-                throw new ResponseException(400, "Invalid ID");
+                throw new ResponseException(400, "Invalid Game ID");
             }
 
             try {
