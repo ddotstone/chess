@@ -16,15 +16,19 @@ public class SignedOutChessClient implements ChessClient {
         authToken = null;
     }
 
-
     public SignedOutChessClient(SignedInChessClient copy) {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
     }
 
+
     public SignedOutChessClient(InGameChessClient copy) {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+    }
+
+    public String getState() {
+        return "<signed in>";
     }
 
     public String eval(String input) throws ResponseException {

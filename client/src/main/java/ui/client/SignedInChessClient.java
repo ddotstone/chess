@@ -34,6 +34,9 @@ public class SignedInChessClient implements ChessClient {
         this.serverFacade = copy.serverFacade;
     }
 
+    public String getState() {
+        return "<signed out>";
+    }
 
     public String eval(String input) throws ResponseException {
         var tokens = input.toLowerCase().split(" ");
@@ -77,6 +80,9 @@ public class SignedInChessClient implements ChessClient {
             String teamColor = params[1];
             int gameIDInt;
             ChessGame.TeamColor teamColorEnum;
+            if (lastList == null) {
+                throw new ResponseException(400, "Invalid Game ID");
+            }
             try {
                 gameIDInt = Integer.parseInt(gameID) - 1;
             } catch (Exception ex) {
@@ -111,17 +117,14 @@ public class SignedInChessClient implements ChessClient {
             result.append("\n");
             result.append("\n");
             orderedGames.add(game);
-            result.append("\tGame: ");
+            result.append("\t(" + String.format("%d", i) + ")\tGame: ");
             result.append(game.gameName());
             result.append("\n");
-            result.append("\tID: ");
-            result.append(String.format("%d", i));
+            result.append("\t\tWhite: ");
+            result.append(game.whiteUsername() == null ? "" : game.whiteUsername());
             result.append("\n");
-            result.append("\tWhite: ");
-            result.append(game.whiteUsername());
-            result.append("\n");
-            result.append("\tBlack: ");
-            result.append(game.blackUsername());
+            result.append("\t\tBlack: ");
+            result.append(game.blackUsername() == null ? "" : game.blackUsername());
             i++;
         }
         lastList = orderedGames;
@@ -132,6 +135,9 @@ public class SignedInChessClient implements ChessClient {
         if (params.length == 1) {
             String gameID = params[0];
             int gameIDInt;
+            if (lastList == null) {
+                throw new ResponseException(400, "Invalid Game ID");
+            }
             try {
                 gameIDInt = Integer.parseInt(gameID) - 1;
             } catch (Exception ex) {
