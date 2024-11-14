@@ -37,7 +37,7 @@ public class Repl {
                 try {
                     System.out.print(SET_TEXT_COLOR_BLUE + client.eval("help") + "\n");
                 } catch (Exception ex) {
-                    System.out.println(SET_BG_COLOR_RED + "Error printing help");
+                    System.out.println(SET_TEXT_COLOR_RED + "Error printing help");
                 }
 
             }

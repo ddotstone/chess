@@ -19,7 +19,7 @@ public class DisplayFunctions {
     }
 
     private static String boardFancyString(ChessBoard board, ChessGame.TeamColor colorOrient) {
-        String[] colDefines = new String[]{" H ", "  G  ", " F ", " E ", " D ", "  C  ", " B ", " A "};
+        String[] colDefines = new String[]{" A ", " B ", "  C  ", " D ", " E ", " F ", "  G  ", " H "};
         String[] rowDefines = new String[]{" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 "};
         ArrayList<String> squares = new ArrayList<>();
 
@@ -28,8 +28,8 @@ public class DisplayFunctions {
             squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + colDefines[i]);
         }
         squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + EMPTY);
-        boolean whiteRow = false;
-        for (int i = 0; i < rowDefines.length; i++) {
+        boolean whiteRow = true;
+        for (int i = rowDefines.length - 1; i >= 0; i--) {
             boolean whiteCol = whiteRow;
             whiteRow = !whiteRow;
             squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + rowDefines[i]);

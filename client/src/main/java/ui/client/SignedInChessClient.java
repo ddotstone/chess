@@ -49,8 +49,9 @@ public class SignedInChessClient implements ChessClient {
             case "create" -> createGame(params);
             case "join" -> joinGame(params);
             case "watch" -> watchGame(params);
+            case "help" -> help();
             case "quit" -> "quit";
-            default -> help();
+            default -> throw new ResponseException(400, "Invalid Command");
         };
     }
 

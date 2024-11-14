@@ -39,8 +39,9 @@ public class SignedOutChessClient implements ChessClient {
             case "login" -> signIn(params);
             case "register" -> register(params);
             case "clear" -> clear(params);
+            case "help" -> help();
             case "quit" -> "quit";
-            default -> help();
+            default -> throw new ResponseException(400, "Invalid Command");
         };
     }
 

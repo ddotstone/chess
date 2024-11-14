@@ -44,7 +44,7 @@ public class InGameChessClient implements ChessClient {
             case "back" -> exitGame(params);
             case "help" -> help();
             case "quit" -> "quit";
-            default -> printBoard();
+            default -> throw new ResponseException(400, "Invalid Command");
         };
     }
 
