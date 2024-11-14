@@ -4,10 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import chess.ChessBoard;
 import chess.ChessGame;
 import exception.ResponseException;
 import connection.ServerFacade;
 import model.GameData;
+
+import static ui.DisplayFunctions.*;
+import static ui.EscapeSequences.SET_BG_COLOR_LIGHT_GREY;
 
 public class SignedInChessClient implements ChessClient {
     String authToken;
@@ -31,24 +35,20 @@ public class SignedInChessClient implements ChessClient {
     }
 
 
-    public String eval(String input) {
-        try {
-            var tokens = input.toLowerCase().split(" ");
-            var cmd = (tokens.length > 0) ? tokens[0] : "help";
-            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
-                case "logout" -> signOut(params);
-                case "clear" -> clear(params);
-                case "list" -> listGames(params);
-                case "create" -> createGame(params);
-                case "join" -> joinGame(params);
-                case "watch" -> watchGame(params);
-                case "quit" -> "quit";
-                default -> help();
-            };
-        } catch (ResponseException ex) {
-            return ex.getMessage();
-        }
+    public String eval(String input) throws ResponseException {
+        var tokens = input.toLowerCase().split(" ");
+        var cmd = (tokens.length > 0) ? tokens[0] : "help";
+        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        return switch (cmd) {
+            case "logout" -> signOut(params);
+            case "clear" -> clear(params);
+            case "list" -> listGames(params);
+            case "create" -> createGame(params);
+            case "join" -> joinGame(params);
+            case "watch" -> watchGame(params);
+            case "quit" -> "quit";
+            default -> help();
+        };
     }
 
     private String signOut(String... params) throws ResponseException {
@@ -78,17 +78,25 @@ public class SignedInChessClient implements ChessClient {
             int gameIDInt;
             ChessGame.TeamColor teamColorEnum;
             try {
-                gameIDInt = Integer.parseInt(gameID);
+                gameIDInt = Integer.parseInt(gameID) - 1;
+            } catch (Exception ex) {
+                throw new ResponseException(400, "Invalid ID");
+            }
+
+            try {
                 teamColorEnum = ChessGame.TeamColor.valueOf(teamColor.toUpperCase());
             } catch (Exception ex) {
-                throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
+                throw new ResponseException(400, "Invalid Team Color");
             }
             if (gameIDInt < 0 || gameIDInt >= lastList.size()) {
-                throw new ResponseException(400, "Invalid Game Code");
+                throw new ResponseException(400, "Invalid Game ID");
             }
             gameIDInt = lastList.get(gameIDInt).gameID();
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
+            ChessBoard board = new ChessBoard();
+            board.resetBoard();
+            System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
             return String.format("joined game %s as %s", gameID, teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
@@ -98,7 +106,7 @@ public class SignedInChessClient implements ChessClient {
         Collection<GameData> games = serverFacade.listGames(authToken);
         ArrayList<GameData> orderedGames = new ArrayList<>();
         StringBuilder result = new StringBuilder("Games:");
-        int i = 0;
+        int i = 1;
         for (GameData game : games) {
             result.append("\n");
             result.append("\n");
@@ -123,7 +131,19 @@ public class SignedInChessClient implements ChessClient {
     private String watchGame(String... params) throws ResponseException {
         if (params.length == 1) {
             String gameID = params[0];
+            int gameIDInt;
+            try {
+                gameIDInt = Integer.parseInt(gameID) - 1;
+            } catch (Exception ex) {
+                throw new ResponseException(400, "Invalid Game ID");
+            }
+            if (gameIDInt < 0 || gameIDInt >= lastList.size()) {
+                throw new ResponseException(400, "Invalid Game ID");
+            }
             transferClass = InGameChessClient.class;
+            ChessBoard board = new ChessBoard();
+            board.resetBoard();
+            System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
             return String.format("watching game %s", gameID);
         }
         throw new ResponseException(400, "Expected: watch <GAME ID>");

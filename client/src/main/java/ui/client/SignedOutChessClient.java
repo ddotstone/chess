@@ -27,21 +27,17 @@ public class SignedOutChessClient implements ChessClient {
         this.serverFacade = copy.serverFacade;
     }
 
-    public String eval(String input) {
-        try {
-            var tokens = input.toLowerCase().split(" ");
-            var cmd = (tokens.length > 0) ? tokens[0] : "help";
-            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-            return switch (cmd) {
-                case "login" -> signIn(params);
-                case "register" -> register(params);
-                case "clear" -> clear(params);
-                case "quit" -> "quit";
-                default -> help();
-            };
-        } catch (ResponseException ex) {
-            return ex.getMessage();
-        }
+    public String eval(String input) throws ResponseException {
+        var tokens = input.toLowerCase().split(" ");
+        var cmd = (tokens.length > 0) ? tokens[0] : "help";
+        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+        return switch (cmd) {
+            case "login" -> signIn(params);
+            case "register" -> register(params);
+            case "clear" -> clear(params);
+            case "quit" -> "quit";
+            default -> help();
+        };
     }
 
     private String signIn(String... params) throws ResponseException {

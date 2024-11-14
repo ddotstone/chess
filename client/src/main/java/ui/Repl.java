@@ -30,18 +30,17 @@ public class Repl {
                 try {
                     constructor = clientClass.getConstructor(client.getClass());
                 } catch (Exception ex) {
-                    System.out.println("Failure Switching States\n");
+                    System.out.println(SET_BG_COLOR_RED + "Failure Switching States\n");
                 }
 
                 client = (ChessClient) constructor.newInstance(client);
-                System.out.println(SET_TEXT_COLOR_BLUE + client.eval("help"));
             }
             String line = scanner.nextLine();
             try {
                 result = client.eval(line);
                 System.out.print(SET_TEXT_COLOR_BLUE + result + "\n");
             } catch (Throwable e) {
-                var msg = e.toString();
+                var msg = e.getMessage();
                 System.out.print(SET_TEXT_COLOR_RED + msg + "\n");
             }
         }
