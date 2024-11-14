@@ -19,9 +19,9 @@ public class UserHandler {
 
     public Object registerHandler(Request req, Response res) throws DataAccessException {
         RegisterRequest registerRequest = deserializeJson(req.body(), RegisterRequest.class);
-        if (registerRequest.username() == null ||
-                registerRequest.password() == null ||
-                registerRequest.email() == null) {
+        if ((registerRequest.username().equals("null")) ||
+                (registerRequest.password().equals("null")) ||
+                (registerRequest.email().equals("null"))) {
             throw new BadRequestException();
         }
         RegisterResponse registerResponse = userService.register(registerRequest);
