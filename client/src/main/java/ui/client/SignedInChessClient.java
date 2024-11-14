@@ -13,7 +13,7 @@ public class SignedInChessClient implements ChessClient {
     String authToken;
     ServerFacade serverFacade;
     Class transferClass;
-    Collection<GameData> lastList;
+    ArrayList<GameData> lastList;
 
     public SignedInChessClient(String url) {
         serverFacade = new ServerFacade(url);
@@ -83,9 +83,13 @@ public class SignedInChessClient implements ChessClient {
             } catch (Exception ex) {
                 throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
             }
+            if (gameIDInt < 0 || gameIDInt >= lastList.size()) {
+                throw new ResponseException(400, "Invalid Game Code");
+            }
+            gameIDInt = lastList.get(gameIDInt).gameID();
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
-            return String.format("joined game %s as %s\n", gameIDInt, teamColor);
+            return String.format("joined game %s as %s\n", gameID, teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
     }

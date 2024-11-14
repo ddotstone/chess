@@ -8,7 +8,7 @@ public class Main {
         try {
             new Repl("http://localhost:8080").run();
         } catch (Exception ex) {
-            System.out.println("Failed to run client");
+            System.out.println(String.format("Failed to run client: %s", ex.toString()));
         }
     }
 }

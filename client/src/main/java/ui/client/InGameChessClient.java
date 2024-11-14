@@ -1,7 +1,10 @@
 package ui.client;
 
+import chess.ChessBoard;
 import exception.ResponseException;
 import server.ServerFacade;
+
+import static ui.DisplayFunctions.*;
 
 import java.util.Arrays;
 
@@ -32,7 +35,7 @@ public class InGameChessClient implements ChessClient {
         var params = Arrays.copyOfRange(tokens, 1, tokens.length);
         return switch (cmd) {
             case "quit" -> "quit";
-            default -> help();
+            default -> printBoard();
         };
     }
 
@@ -43,5 +46,11 @@ public class InGameChessClient implements ChessClient {
 
     public Class transferStates() {
         return null;
+    }
+
+    public String printBoard(String... params) {
+        ChessBoard board = new ChessBoard();
+        board.resetBoard();
+        return (boardStringBlack(board) + "\n\n" + boardStringWhite(board));
     }
 }
