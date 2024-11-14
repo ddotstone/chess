@@ -1,7 +1,5 @@
 package ui.client;
 
-import server.ServerFacade;
-
 public interface ChessClient {
 
     public String eval(String input);
