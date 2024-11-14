@@ -87,7 +87,7 @@ public class DisplayFunctions {
             for (String square : squares) {
                 result.append(square);
                 added++;
-                if (added % (colDefines.length + 2) == 0) {
+                if (((added / 10) != 10) && (added % (colDefines.length + 2) == 0)) {
                     result.append(RESET_BG_COLOR + "\n");
                 }
 
@@ -98,13 +98,13 @@ public class DisplayFunctions {
                 String square = squares.get(i);
                 result.append(square);
                 added++;
-                if (added % (colDefines.length + 2) == 0) {
+                if (((added / 10) != 10) && (added % (colDefines.length + 2) == 0)) {
                     result.append(RESET_BG_COLOR + "\n");
                 }
 
             }
         }
-        result.append(RESET_BG_COLOR + "\n");
+        result.append(RESET_BG_COLOR);
         return result.toString();
     }
 }

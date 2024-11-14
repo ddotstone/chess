@@ -19,7 +19,7 @@ public class Repl {
 
     public void run() throws InvocationTargetException, InstantiationException, IllegalAccessException {
         System.out.println(WHITE_QUEEN + " Welcome to the Chess. Sign in to start. " + WHITE_QUEEN);
-        System.out.print(SET_TEXT_COLOR_BLUE + client.help());
+        System.out.print(SET_TEXT_COLOR_BLUE + client.help() + "\n");
 
         Scanner scanner = new Scanner(System.in);
         var result = "";

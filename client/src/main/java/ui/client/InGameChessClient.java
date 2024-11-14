@@ -2,8 +2,10 @@ package ui.client;
 
 import chess.ChessBoard;
 import connection.ServerFacade;
+import exception.ResponseException;
 
 import static ui.DisplayFunctions.*;
+import static ui.EscapeSequences.*;
 
 import java.util.Arrays;
 
@@ -29,13 +31,23 @@ public class InGameChessClient implements ChessClient {
     }
 
     public String eval(String input) {
-        var tokens = input.toLowerCase().split(" ");
-        var cmd = (tokens.length > 0) ? tokens[0] : "help";
-        var params = Arrays.copyOfRange(tokens, 1, tokens.length);
-        return switch (cmd) {
-            case "quit" -> "quit";
-            default -> printBoard();
-        };
+        try {
+            var tokens = input.toLowerCase().split(" ");
+            var cmd = (tokens.length > 0) ? tokens[0] : "help";
+            var params = Arrays.copyOfRange(tokens, 1, tokens.length);
+            return switch (cmd) {
+                case "clear" -> clear(params);
+                case "quit" -> "quit";
+                default -> printBoard();
+            };
+        } catch (ResponseException ex) {
+            return ex.getMessage();
+        }
+    }
+
+    private String clear(String... params) throws ResponseException {
+        serverFacade.clear();
+        return "cleared database";
     }
 
     @Override
@@ -50,6 +62,6 @@ public class InGameChessClient implements ChessClient {
     public String printBoard(String... params) {
         ChessBoard board = new ChessBoard();
         board.resetBoard();
-        return (boardStringBlack(board) + "\n\n" + boardStringWhite(board));
+        return (boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
     }
 }

@@ -89,7 +89,7 @@ public class SignedInChessClient implements ChessClient {
             gameIDInt = lastList.get(gameIDInt).gameID();
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
-            return String.format("joined game %s as %s\n", gameID, teamColor);
+            return String.format("joined game %s as %s", gameID, teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
     }
@@ -97,9 +97,11 @@ public class SignedInChessClient implements ChessClient {
     private String listGames(String... params) throws ResponseException {
         Collection<GameData> games = serverFacade.listGames(authToken);
         ArrayList<GameData> orderedGames = new ArrayList<>();
-        StringBuilder result = new StringBuilder("Games:\n");
+        StringBuilder result = new StringBuilder("Games:");
         int i = 0;
         for (GameData game : games) {
+            result.append("\n");
+            result.append("\n");
             orderedGames.add(game);
             result.append("\tGame: ");
             result.append(game.gameName());
@@ -112,8 +114,6 @@ public class SignedInChessClient implements ChessClient {
             result.append("\n");
             result.append("\tBlack: ");
             result.append(game.blackUsername());
-            result.append("\n");
-            result.append("\n");
             i++;
         }
         lastList = orderedGames;
@@ -124,7 +124,7 @@ public class SignedInChessClient implements ChessClient {
         if (params.length == 1) {
             String gameID = params[0];
             transferClass = InGameChessClient.class;
-            return String.format("watching game %s\n", gameID);
+            return String.format("watching game %s", gameID);
         }
         throw new ResponseException(400, "Expected: watch <GAME ID>");
     }

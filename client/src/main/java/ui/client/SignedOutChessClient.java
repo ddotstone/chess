@@ -35,6 +35,7 @@ public class SignedOutChessClient implements ChessClient {
             return switch (cmd) {
                 case "login" -> signIn(params);
                 case "register" -> register(params);
+                case "clear" -> clear(params);
                 case "quit" -> "quit";
                 default -> help();
             };
@@ -53,7 +54,7 @@ public class SignedOutChessClient implements ChessClient {
 
             return String.format("signed in as: %s", username);
         }
-        throw new ResponseException(400, "Expected: signIn <username> <password>");
+        throw new ResponseException(400, "Expected: login <username> <password>");
     }
 
     private String register(String... params) throws ResponseException {
@@ -67,6 +68,11 @@ public class SignedOutChessClient implements ChessClient {
             return String.format("registered as: %s", username);
         }
         throw new ResponseException(400, "Expected: register <username> <password> <email>");
+    }
+
+    private String clear(String... params) throws ResponseException {
+        serverFacade.clear();
+        return "cleared database";
     }
 
     public String help() {
