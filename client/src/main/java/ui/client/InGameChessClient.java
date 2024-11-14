@@ -78,9 +78,4 @@ public class InGameChessClient implements ChessClient {
         return transferClass;
     }
 
-    public String printBoard(String... params) {
-        ChessBoard board = new ChessBoard();
-        board.resetBoard();
-        return (boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
-    }
 }
