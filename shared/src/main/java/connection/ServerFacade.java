@@ -1,4 +1,4 @@
-package server;
+package connection;
 
 import chess.ChessGame;
 import com.google.gson.Gson;

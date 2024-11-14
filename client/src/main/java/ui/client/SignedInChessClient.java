@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import chess.ChessGame;
 import exception.ResponseException;
-import server.ServerFacade;
+import connection.ServerFacade;
 import model.GameData;
 
 public class SignedInChessClient implements ChessClient {

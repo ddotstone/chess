@@ -3,8 +3,8 @@ package ui.client;
 import java.util.Arrays;
 
 import exception.ResponseException;
-import server.ServerFacade;
 import model.AuthData;
+import connection.ServerFacade;
 
 public class SignedOutChessClient implements ChessClient {
     String authToken;

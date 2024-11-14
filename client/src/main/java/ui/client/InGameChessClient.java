@@ -1,8 +1,7 @@
 package ui.client;
 
 import chess.ChessBoard;
-import exception.ResponseException;
-import server.ServerFacade;
+import connection.ServerFacade;
 
 import static ui.DisplayFunctions.*;
 

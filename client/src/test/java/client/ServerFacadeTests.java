@@ -3,7 +3,7 @@ package client;
 import chess.ChessGame;
 import org.junit.jupiter.api.*;
 import server.Server;
-import server.ServerFacade;
+import connection.ServerFacade;
 import exception.ResponseException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
