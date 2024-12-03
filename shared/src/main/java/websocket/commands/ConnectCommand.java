@@ -1,6 +1,5 @@
 package websocket.commands;
 
-import chess.ChessMove;
 import com.google.gson.Gson;
 
 public class ConnectCommand extends UserGameCommand {
