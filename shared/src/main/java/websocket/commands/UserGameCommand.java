@@ -2,31 +2,26 @@ package websocket.commands;
 
 import java.util.Objects;
 
+import com.google.gson.Gson;
+
 /**
  * Represents a command a user can send the server over a websocket
- *
+ * <p>
  * Note: You can add to this class, but you should not alter the existing
  * methods.
  */
 public class UserGameCommand {
 
-    private final CommandType commandType;
+    protected final CommandType commandType;
 
-    private final String authToken;
+    protected final String authToken;
 
-    private final Integer gameID;
+    protected final Integer gameID;
 
     public UserGameCommand(CommandType commandType, String authToken, Integer gameID) {
         this.commandType = commandType;
         this.authToken = authToken;
         this.gameID = gameID;
-    }
-
-    public enum CommandType {
-        CONNECT,
-        MAKE_MOVE,
-        LEAVE,
-        RESIGN
     }
 
     public CommandType getCommandType() {
@@ -58,5 +53,17 @@ public class UserGameCommand {
     @Override
     public int hashCode() {
         return Objects.hash(getCommandType(), getAuthToken(), getGameID());
+    }
+
+    @Override
+    public String toString() {
+        return new Gson().toJson(this);
+    }
+
+    public enum CommandType {
+        CONNECT,
+        MAKE_MOVE,
+        LEAVE,
+        RESIGN
     }
 }
