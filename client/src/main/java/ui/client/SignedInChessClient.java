@@ -21,6 +21,7 @@ public class SignedInChessClient implements ChessClient {
     Class transferClass;
     ArrayList<GameData> lastList;
     NotificationHandler notificationHandler;
+    int gameID;
 
     public SignedInChessClient(String url, NotificationHandler notificationHandler) {
         this.url = url;
@@ -110,6 +111,7 @@ public class SignedInChessClient implements ChessClient {
             gameIDInt = lastList.get(gameIDInt).gameID();
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
+            this.gameID = gameIDInt;
             ChessBoard board = new ChessBoard();
             board.resetBoard();
             System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
@@ -157,6 +159,7 @@ public class SignedInChessClient implements ChessClient {
                 throw new ResponseException(400, "Invalid Game ID");
             }
             transferClass = InGameChessClient.class;
+            this.gameID = gameIDInt;
             ChessBoard board = new ChessBoard();
             board.resetBoard();
             System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));

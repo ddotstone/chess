@@ -1,6 +1,7 @@
 package ui.client;
 
 import chess.ChessBoard;
+import chess.ChessGame;
 import connection.ServerFacade;
 import exception.ResponseException;
 import websocketClient.NotificationHandler;
@@ -16,25 +17,35 @@ public class InGameChessClient implements ChessClient {
     NotificationHandler notificationHandler;
     String url;
     String authToken;
+    ChessGame.TeamColor teamColor;
     ServerFacade serverFacade;
     Class transferClass;
+    int gameID;
 
     public InGameChessClient(String url, NotificationHandler notificationHandler) {
         this.url = url;
         this.notificationHandler = notificationHandler;
         serverFacade = new ServerFacade(url);
         authToken = null;
+        this.teamColor = ChessGame.TeamColor.GREY;
+        gameID = 0;
     }
 
     public InGameChessClient(SignedOutChessClient copy) {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.url = copy.url;
+        this.notificationHandler = copy.notificationHandler;
+        this.gameID = 0;
+
     }
 
     public InGameChessClient(SignedInChessClient copy) {
-
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.url = copy.url;
+        this.notificationHandler = copy.notificationHandler;
+        this.gameID = copy.gameID;
     }
 
     public String getState() {
@@ -47,8 +58,10 @@ public class InGameChessClient implements ChessClient {
         var params = Arrays.copyOfRange(tokens, 1, tokens.length);
         return switch (cmd) {
             case "clear" -> clear(params);
-            case "logout" -> signOut(params);
-            case "back" -> exitGame(params);
+            case "draw" -> draw(params);
+            case "move" -> move(params);
+            case "resign" -> resign(params);
+            case "leave" -> leave(params);
             case "help" -> help();
             case "quit" -> "quit";
             default -> throw new ResponseException(400, "Invalid Command");
@@ -60,10 +73,10 @@ public class InGameChessClient implements ChessClient {
         return "cleared database";
     }
 
-    private String signOut(String... params) throws ResponseException {
-        serverFacade.signOut(authToken);
-        transferClass = SignedOutChessClient.class;
-        return "signed out";
+    private String draw(String... params) throws ResponseException {
+        WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+        webSocketFacade.draw(authToken, );
+        return "";
     }
 
     private String exitGame(String... params) throws ResponseException {
@@ -75,8 +88,10 @@ public class InGameChessClient implements ChessClient {
     public String help() {
         return """
                 Options:
-                Exit game: "back"
-                Logout: "logout"
+                Redraw Board: "draw"
+                Make Move: "move" <START> <END>
+                Resign: "resign"
+                Leave Game: "leave"
                 Quit: "quit"
                 """;
     }

@@ -97,4 +97,13 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
+    public void draw(String authToken, int gameID) throws ResponseException {
+        try {
+            var command = new websocket.commands.LoadGameCommand(authToken, gameID);
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+            this.session.close();
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
+    }
 }

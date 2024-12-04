@@ -16,6 +16,7 @@ import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import server.Server;
 import websocket.*;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
@@ -43,6 +44,7 @@ public class WebSocketHandler {
                         MakeMoveCommand.class), session);
                 case RESIGN -> resign(new Gson().fromJson(message, ResignCommand.class), session);
                 case LEAVE -> leave(new Gson().fromJson(message, LeaveCommand.class), session);
+                case LOAD_GAME -> loadGame(new Gson().fromJson(message, LoadGameCommand.class), session);
             }
         } catch (Exception e) {
             UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
@@ -106,6 +108,13 @@ public class WebSocketHandler {
         ChessGame.TeamColor color = getTeamColor(userName, leaveCommand.getGameID());
         connections.remove(userName);
         connections.broadcast(userName, new NotificationMessage(userName + " has left the game"));
+    }
+
+    private void loadGame(LoadGameCommand loadGameCommand, Session session) throws DataAccessException, IOException {
+        String authToken = loadGameCommand.getAuthToken();
+        String userName = getUserName(authToken);
+        GameData gameData = getGameData(loadGameCommand.getGameID());
+        connections.send(userName, new LoadGameMessage(gameData));
     }
 
     public String getUserName(String authToken) throws DataAccessException {
