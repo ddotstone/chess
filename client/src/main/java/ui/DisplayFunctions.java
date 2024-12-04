@@ -45,17 +45,7 @@ public class DisplayFunctions {
             for (int j = 0; j < colDefines.length; j++) {
                 String backColor = (whiteCol) ? SET_BG_COLOR_WHITE : SET_BG_COLOR_LIGHT_GREY;
                 ChessPiece currPiece = board.getPiece(new ChessPosition(i + 1, j + 1));
-                if (highlight != null) {
-                    for (ChessMove move : highlight) {
-                        if (move.getEndPosition().equals(new ChessPosition(i + 1, j + 1))) {
-                            switch (backColor) {
-                                case SET_BG_COLOR_WHITE -> backColor = SET_BG_COLOR_GREEN;
-                                default -> backColor = SET_BG_COLOR_DARK_GREEN;
-                            }
-                            break;
-                        }
-                    }
-                }
+                backColor = getIsHighlight(backColor, highlight, i, j);
 
                 String piece;
                 if (currPiece == null) {
@@ -93,7 +83,6 @@ public class DisplayFunctions {
             }
             squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + rowDefines[i]);
         }
-
         squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + EMPTY);
         for (int i = 0; i < colDefines.length; i++) {
             squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + colDefines[i]);
@@ -110,7 +99,6 @@ public class DisplayFunctions {
                 if (((added / 10) != 10) && (added % (colDefines.length + 2) == 0)) {
                     result.append(RESET_BG_COLOR + "\n");
                 }
-
             }
         } else {
             int added = 0;
@@ -121,10 +109,24 @@ public class DisplayFunctions {
                 if (((added / 10) != 10) && (added % (colDefines.length + 2) == 0)) {
                     result.append(RESET_BG_COLOR + "\n");
                 }
-
             }
         }
         result.append(RESET_BG_COLOR);
         return result.toString();
+    }
+
+    private static String getIsHighlight(String backColor, Collection<ChessMove> highlight, int row, int col) {
+        if (highlight != null) {
+            for (ChessMove move : highlight) {
+                if (move.getEndPosition().equals(new ChessPosition(row + 1, col + 1))) {
+                    switch (backColor) {
+                        case SET_BG_COLOR_WHITE -> backColor = SET_BG_COLOR_GREEN;
+                        default -> backColor = SET_BG_COLOR_DARK_GREEN;
+                    }
+                    break;
+                }
+            }
+        }
+        return backColor;
     }
 }

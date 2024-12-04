@@ -1,10 +1,6 @@
-package websocketServer;
+package websocketserver;
 
 import org.eclipse.jetty.websocket.api.Session;
-import server.Server;
-import websocket.messages.NotificationMessage;
-import websocket.messages.ErrorMessage;
-import websocket.messages.LoadGameMessage;
 import websocket.messages.ServerMessage;
 
 

@@ -1,4 +1,4 @@
-package websocketServer;
+package websocketserver;
 
 import org.eclipse.jetty.websocket.api.Session;
 

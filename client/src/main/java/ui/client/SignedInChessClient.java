@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import websocketClient.NotificationHandler;
+import websocketclient.NotificationHandler;
 import chess.ChessBoard;
 import chess.ChessGame;
 import exception.ResponseException;

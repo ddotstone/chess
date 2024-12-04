@@ -3,8 +3,8 @@ package ui.client;
 import chess.*;
 import connection.ServerFacade;
 import exception.ResponseException;
-import websocketClient.NotificationHandler;
-import websocketClient.WebSocketFacade;
+import websocketclient.NotificationHandler;
+import websocketclient.WebSocketFacade;
 import model.GameData;
 
 import static ui.DisplayFunctions.*;

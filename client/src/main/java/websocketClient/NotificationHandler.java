@@ -1,4 +1,4 @@
-package websocketClient;
+package websocketclient;
 
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;

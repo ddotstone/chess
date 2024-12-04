@@ -1,7 +1,6 @@
-package websocketServer;
+package websocketserver;
 
 import chess.ChessGame;
-import chess.ChessMove;
 import chess.ChessPosition;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -18,15 +17,12 @@ import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import server.Server;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.NotificationMessage;
-import websocket.messages.ServerMessage;
 import websocket.messages.LoadGameMessage;
 
 import java.io.IOException;
-import java.util.Timer;
 
 @WebSocket
 public class WebSocketHandler {

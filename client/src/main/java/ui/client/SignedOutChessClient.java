@@ -3,7 +3,7 @@ package ui.client;
 import java.util.Arrays;
 
 import chess.ChessGame;
-import websocketClient.NotificationHandler;
+import websocketclient.NotificationHandler;
 import exception.ResponseException;
 import model.AuthData;
 import connection.ServerFacade;

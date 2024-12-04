@@ -5,7 +5,7 @@ import dataaccess.DataAccessException;
 import dataaccess.NotFoundException;
 import handler.*;
 import spark.*;
-import websocketServer.WebSocketHandler;
+import websocketserver.WebSocketHandler;
 
 import java.util.Map;
 

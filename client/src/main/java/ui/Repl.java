@@ -7,7 +7,7 @@ import ui.client.SignedOutChessClient;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
-import websocketClient.NotificationHandler;
+import websocketclient.NotificationHandler;
 import model.GameData;
 
 import java.lang.reflect.Constructor;
