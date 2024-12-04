@@ -137,15 +137,24 @@ public class InGameChessClient implements ChessClient {
         return "";
     }
 
-    public String highlight(String... params) {
+    public String highlight(String... params) throws ResponseException{
+        switch (this.teamColor) {
+            if (params.length == 1)
+            {
+                String positionString = params[0];
+                ChessPosition position = convertStringToPosition(positionString)
+                case BLACK -> System.out.println(boardStringBlackHighlight(lastGame.game(), position) + "\n");
+                default -> System.out.println(boardStringWhiteHighlight(lastGame.game(), position) + "\n");
+            }
 
+        }
     }
 
     public void printBoard(GameData game) {
         lastGame = game;
         switch (this.teamColor) {
-            case BLACK -> System.out.println(boardStringBlack(lastGame.game().getBoard()) + "\n");
-            default -> System.out.println(boardStringWhite(lastGame.game().getBoard()) + "\n");
+            case BLACK -> System.out.println(boardStringBlack(lastGame.game()) + "\n");
+            default -> System.out.println(boardStringWhite(lastGame) + "\n");
         }
     }
 

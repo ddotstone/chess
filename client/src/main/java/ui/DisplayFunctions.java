@@ -1,27 +1,36 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 
 import static ui.EscapeSequences.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public class DisplayFunctions {
-    public static String boardStringWhite(ChessBoard board) {
-        return boardFancyString(board, ChessGame.TeamColor.WHITE);
+    public static String boardStringWhite(ChessGame game) {
+        return boardFancyString(game, ChessGame.TeamColor.WHITE, null);
     }
 
-    public static String boardStringBlack(ChessBoard board) {
-        return boardFancyString(board, ChessGame.TeamColor.BLACK);
+    public static String boardStringBlack(ChessGame game) {
+        return boardFancyString(game, ChessGame.TeamColor.BLACK, null);
     }
 
-    private static String boardFancyString(ChessBoard board, ChessGame.TeamColor colorOrient) {
+    public static String boardStringWhiteHighlight(ChessGame game, ChessPosition position) {
+        return boardFancyString(game, ChessGame.TeamColor.WHITE, position);
+
+    }
+
+    public static String boardStringBlackHighlight(ChessGame game, ChessPosition position) {
+        return boardFancyString(game, ChessGame.TeamColor.BLACK, position);
+    }
+
+    private static String boardFancyString(ChessGame game, ChessGame.TeamColor colorOrient, ChessPosition position) {
+        ChessBoard board = game.getBoard();
         String[] colDefines = new String[]{" A ", " B ", "  C  ", " D ", " E ", " F ", "  G  ", " H "};
         String[] rowDefines = new String[]{" 1 ", " 2 ", " 3 ", " 4 ", " 5 ", " 6 ", " 7 ", " 8 "};
         ArrayList<String> squares = new ArrayList<>();
+        Collection<ChessMove> highlight = game.validMoves(position);
 
         squares.add(SET_BG_COLOR_BLACK + SET_TEXT_COLOR_WHITE + EMPTY);
         for (int i = 0; i < colDefines.length; i++) {
@@ -36,6 +45,15 @@ public class DisplayFunctions {
             for (int j = 0; j < colDefines.length; j++) {
                 String backColor = (whiteCol) ? SET_BG_COLOR_WHITE : SET_BG_COLOR_LIGHT_GREY;
                 ChessPiece currPiece = board.getPiece(new ChessPosition(i + 1, j + 1));
+                for (ChessMove move : highlight) {
+                    if (move.equals(new ChessPosition(i + 1, j + 1))) {
+                        switch (backColor) {
+                            case SET_BG_COLOR_WHITE -> backColor = SET_BG_COLOR_GREEN;
+                            default -> backColor = SET_BG_COLOR_DARK_GREEN;
+                        }
+                    }
+                    break;
+                }
 
                 String piece;
                 if (currPiece == null) {
