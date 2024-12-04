@@ -12,6 +12,10 @@ public class MakeMoveCommand extends UserGameCommand {
         this.move = move;
     }
 
+    public ChessMove getMove() {
+        return this.move;
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);

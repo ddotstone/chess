@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dataaccess.DataAccessException;
+import dataaccess.GameDataDAO;
 import dataaccess.SQLAuthDataDAO;
 import dataaccess.SQLGameDataDAO;
 import exception.ResponseException;
@@ -16,10 +17,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import websocket.*;
-import websocket.commands.UserGameCommand;
-import websocket.commands.ResignCommand;
-import websocket.commands.ConnectCommand;
-import websocket.commands.LeaveCommand;
+import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
@@ -41,33 +39,50 @@ public class WebSocketHandler {
             switch (type) {
                 case CONNECT -> connect(new Gson().fromJson(message,
                         ConnectCommand.class), session);
+                case MAKE_MOVE -> makeMove(new Gson().fromJson(message,
+                        ConnectCommand.class), session);
             }
         } catch (Exception e) {
+            UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
+            try {
+                String userName = getUserName(userGameCommand.getAuthToken());
+            }
+            catch(DataAccessException dataAccessException)
+            {
+                System.out.println("Invalid Auth Token");
+            }
             String error = "Error: " + e.getMessage();
             System.out.println(error + "\n");
             ErrorMessage errorMessage = new ErrorMessage(error);
+            connections.send()
         }
     }
 
     private void connect(ConnectCommand connectCommand, Session session) throws DataAccessException, IOException {
-        String userName = getUserName(connectCommand.getAuthToken();
+        String userName = getUserName(connectCommand.getAuthToken());
         connections.add(userName, session);
         ChessGame.TeamColor color = getTeamColor(userName, connectCommand.getGameID());
         String broadcastMessage = userName + "has joined";
-        switch(color) {
+        switch (color) {
             case ChessGame.TeamColor.WHITE -> broadcastMessage = userName + "has joined as white";
             case ChessGame.TeamColor.BLACK -> broadcastMessage = userName + "has joined as black";
-            case ChessGame.TeamColor.NONE -> broadcastMessage = userName + "has joined as an observer";
+            case ChessGame.TeamColor.GREY -> broadcastMessage = userName + "has joined as an observer";
         }
         connections.broadcast(userName, new NotificationMessage(broadcastMessage));
         connections.send(userName, new LoadGameMessage(getGameData(connectCommand.getGameID())));
     }
 
-    private void exit(String visitorName) throws IOException {
-        connections.remove(visitorName);
-        var message = String.format("%s left the shop", visitorName);
-        var notification = new Notification(Notification.Type.DEPARTURE, message);
-        connections.broadcast(visitorName, notification);
+    private void makeMove(MakeMoveCommand makeMoveCommand, Session session) throws Exception, DataAccessException, IOException {
+        GameData gameData = getGameData(makeMoveCommand.getGameID());
+        String userName = getUserName(makeMoveCommand.getAuthToken());
+        ChessGame.TeamColor teamColor = getTeamColor(userName, makeMoveCommand.getGameID());
+        ChessGame.TeamColor turnColor = gameData.game().getTeamTurn();
+        gameData.game().makeMove(makeMoveCommand.getMove());
+
+        GameDataDAO gameDataDAO = new SQLGameDataDAO();
+        gameDataDAO.updateGame(gameData);
+        connections.broadcast("", new LoadGameMessage(gameData));
+        connections.broadcast(userName, new NotificationMessage(""));
     }
 
     public void makeNoise(String petName, String sound) throws ResponseException {
@@ -91,18 +106,15 @@ public class WebSocketHandler {
         return gameDataDAO.getGame(gameID);
     }
 
-    public ChessGame.TeamColor getTeamColor(String userName, int gameID) throws DataAccessException
-    {
+    public ChessGame.TeamColor getTeamColor(String userName, int gameID) throws DataAccessException {
         GameData gameData = getGameData(gameID);
-        if (gameData.whiteUsername().equals(userName))
-        {
+        if (gameData.whiteUsername().equals(userName)) {
             return ChessGame.TeamColor.WHITE;
         }
 
-        if (gameData.blackUsername().equals(userName))
-        {
+        if (gameData.blackUsername().equals(userName)) {
             return ChessGame.TeamColor.BLACK;
         }
-        return ChessGame.TeamColor.NONE;
+        return ChessGame.TeamColor.GREY;
     }
 }

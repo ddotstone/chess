@@ -91,10 +91,13 @@ public class ChessGame {
         ChessPosition end = move.getEndPosition();
         ChessPiece currPiece = board.getPiece(move.getStartPosition());
         if (currPiece == null) {
-            throw new InvalidMoveException("Empty Space");
+            throw new InvalidMoveException("Invalid Starting Space");
+        }
+        if (teamTurn == TeamColor.NONE) {
+            throw new InvalidMoveException("The game is over");
         }
         if (currPiece.getTeamColor() != teamTurn) {
-            throw new InvalidMoveException("Making move out of turn");
+            throw new InvalidMoveException("It is " + teamTurn.toString() + "'s turn");
         }
         Collection<ChessMove> allMoves = validMoves(start);
         boolean legalMove = false;
@@ -334,6 +337,7 @@ public class ChessGame {
     public enum TeamColor {
         WHITE,
         BLACK,
+        GREY,
         NONE
     }
 }
