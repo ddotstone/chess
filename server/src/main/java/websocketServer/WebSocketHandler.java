@@ -40,21 +40,22 @@ public class WebSocketHandler {
                 case CONNECT -> connect(new Gson().fromJson(message,
                         ConnectCommand.class), session);
                 case MAKE_MOVE -> makeMove(new Gson().fromJson(message,
-                        ConnectCommand.class), session);
+                        MakeMoveCommand.class), session);
+                case RESIGN -> resign(new Gson().fromJson(message, ResignCommand.class), session);
+                case LEAVE -> leave(new Gson().fromJson(message, LeaveCommand.class), session);
             }
         } catch (Exception e) {
             UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
+            String userName = "";
             try {
-                String userName = getUserName(userGameCommand.getAuthToken());
-            }
-            catch(DataAccessException dataAccessException)
-            {
+                userName = getUserName(userGameCommand.getAuthToken());
+            } catch (DataAccessException dataAccessException) {
                 System.out.println("Invalid Auth Token");
             }
             String error = "Error: " + e.getMessage();
             System.out.println(error + "\n");
             ErrorMessage errorMessage = new ErrorMessage(error);
-            connections.send()
+            connections.send(userName, errorMessage);
         }
     }
 
@@ -85,14 +86,26 @@ public class WebSocketHandler {
         connections.broadcast(userName, new NotificationMessage(""));
     }
 
-    public void makeNoise(String petName, String sound) throws ResponseException {
-        try {
-            var message = String.format("%s says %s", petName, sound);
-            var notification = new Notification(Notification.Type.NOISE, message);
-            connections.broadcast("", notification);
-        } catch (Exception ex) {
-            throw new ResponseException(500, ex.getMessage());
+    private void resign(ResignCommand resignCommand, Session session) throws Exception, ResponseException, DataAccessException {
+        String authToken = resignCommand.getAuthToken();
+        String userName = getUserName(authToken);
+        GameData gameData = getGameData(resignCommand.getGameID());
+        ChessGame.TeamColor teamColor = getTeamColor(userName, resignCommand.getGameID());
+        if (teamColor == ChessGame.TeamColor.GREY) {
+            throw new Exception("Observers cannot resign");
         }
+        gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
+
+        SQLGameDataDAO gameDataDAO = new SQLGameDataDAO();
+        gameDataDAO.updateGame(gameData);
+        connections.broadcast(userName, new NotificationMessage(userName + "has resigned"));
+    }
+
+    private void leave(LeaveCommand leaveCommand, Session session) throws DataAccessException, IOException {
+        String userName = getUserName(leaveCommand.getAuthToken());
+        ChessGame.TeamColor color = getTeamColor(userName, leaveCommand.getGameID());
+        connections.remove(userName);
+        connections.broadcast(userName, new NotificationMessage(userName + " has left the game"));
     }
 
     public String getUserName(String authToken) throws DataAccessException {
