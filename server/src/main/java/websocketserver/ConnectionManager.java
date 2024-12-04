@@ -63,15 +63,17 @@ public class ConnectionManager {
             var conn = connections.get(userName);
             if (conn == null) {
                 var connection = new Connection(userName, session);
-                if (session.isOpen())
+                if (session.isOpen()) {
                     connection.send(message.toString());
+                }
             } else if (conn.session.isOpen()) {
                 conn.send(message.toString());
             }
         } else {
             var connection = new Connection(userName, session);
-            if (session.isOpen())
+            if (session.isOpen()) {
                 connection.send(message.toString());
+            }
         }
     }
 }
