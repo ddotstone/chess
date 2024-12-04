@@ -1,18 +1,19 @@
 package websocket.messages;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
 
 public class LoadGameMessage extends ServerMessage {
-    protected final GameData gameData;
+    protected final ChessGame game;
 
-    public LoadGameMessage(GameData gameData) {
+    public LoadGameMessage(ChessGame game) {
         super(ServerMessageType.LOAD_GAME);
-        this.gameData = gameData;
+        this.game = game;
     }
 
-    public GameData getGameData() {
-        return gameData;
+    public ChessGame getGameData() {
+        return game;
     }
 
     @Override

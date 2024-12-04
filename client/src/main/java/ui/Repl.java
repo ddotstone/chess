@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessGame;
 import ui.client.ChessClient;
 import ui.client.InGameChessClient;
 import ui.client.SignedOutChessClient;
@@ -68,8 +69,8 @@ public class Repl implements NotificationHandler {
     }
 
     public void loadGame(LoadGameMessage loadGameMessage) {
-        GameData gameData = loadGameMessage.getGameData();
+        ChessGame game = loadGameMessage.getGameData();
         InGameChessClient inGameChessClient = (InGameChessClient) client;
-        inGameChessClient.printBoard(gameData);
+        inGameChessClient.printBoard(game);
     }
 }

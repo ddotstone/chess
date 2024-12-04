@@ -11,6 +11,15 @@ public record GameData(int gameID, String whiteUsername, String blackUsername, S
                 (game == null) ? new ChessGame(copy.game()) : new ChessGame(game));
     }
 
+    public GameData(String whiteUsername, String blackUsername, GameData copy) {
+        this(copy.gameID(),
+                whiteUsername,
+                blackUsername,
+                copy.gameName(),
+                copy.game());
+    }
+
+
     @Override
     public String toString() {
         String printWhiteUsername = (this.whiteUsername == null) ? "" : this.whiteUsername;

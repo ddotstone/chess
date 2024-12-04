@@ -50,7 +50,8 @@ public class WebSocketHandler {
             }
         } catch (Exception e) {
             UserGameCommand userGameCommand = new Gson().fromJson(message, UserGameCommand.class);
-            String userName = "";
+            String userName = userGameCommand.getAuthToken();
+            int gameID = userGameCommand.getGameID();
             try {
                 userName = getUserName(userGameCommand.getAuthToken());
             } catch (DataAccessException dataAccessException) {
@@ -59,22 +60,23 @@ public class WebSocketHandler {
             String error = "Error: " + e.getMessage();
             System.out.println(error + "\n");
             ErrorMessage errorMessage = new ErrorMessage(error);
-            connections.send(userName, errorMessage);
+            connections.sendClean(userName, gameID, errorMessage, session);
         }
     }
 
     private void connect(ConnectCommand connectCommand, Session session) throws DataAccessException, IOException {
         String userName = getUserName(connectCommand.getAuthToken());
-        connections.add(userName, session);
         ChessGame.TeamColor color = getTeamColor(userName, connectCommand.getGameID());
+        connections.add(userName, connectCommand.getGameID(), session);
         String broadcastMessage = userName + "has joined";
         switch (color) {
             case ChessGame.TeamColor.WHITE -> broadcastMessage = userName + " has joined as white";
             case ChessGame.TeamColor.BLACK -> broadcastMessage = userName + " has joined as black";
             case ChessGame.TeamColor.GREY -> broadcastMessage = userName + " has joined as an observer";
         }
-        connections.broadcast(userName, new NotificationMessage(broadcastMessage));
-        connections.send(userName, new LoadGameMessage(getGameData(connectCommand.getGameID())));
+        LoadGameMessage loadGameMessage = new LoadGameMessage(getGameData(connectCommand.getGameID()).game());
+        connections.broadcast(userName, connectCommand.getGameID(), new NotificationMessage(broadcastMessage));
+        connections.send(userName, connectCommand.getGameID(), loadGameMessage);
     }
 
     private void makeMove(MakeMoveCommand makeMoveCommand, Session session) throws Exception, DataAccessException, IOException {
@@ -93,29 +95,26 @@ public class WebSocketHandler {
         }
 
         gameData.game().makeMove(makeMoveCommand.getMove());
-        connections.broadcast(userName, new NotificationMessage(userName + " has moved " +
+        connections.broadcast(userName, makeMoveCommand.getGameID(), new NotificationMessage(userName + " has moved " +
                 getPieceAtPosition(gameData.game(), makeMoveCommand.getMove().getEndPosition()) + " from " +
                 convertPositionToString(makeMoveCommand.getMove().getStartPosition()) + " to " +
                 convertPositionToString(makeMoveCommand.getMove().getEndPosition())));
         if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
-            connections.broadcast("", new NotificationMessage("WHITE is in checkmate, gameover"));
+            connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("WHITE is in checkmate, gameover"));
             gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
 
         } else if (gameData.game().isInCheck(ChessGame.TeamColor.WHITE)) {
-            connections.broadcast("", new NotificationMessage("WHITE is in check"));
+            connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("WHITE is in check"));
         } else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
-            connections.broadcast("", new NotificationMessage("BLACK is in checkmate, gameover"));
+            connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("BLACK is in checkmate, gameover"));
             gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
 
         } else if (gameData.game().isInCheck(ChessGame.TeamColor.BLACK)) {
-            connections.broadcast("", new NotificationMessage("BLACK is in check"));
+            connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("BLACK is in check"));
         }
-
-
         GameDataDAO gameDataDAO = new SQLGameDataDAO();
         gameDataDAO.updateGame(gameData);
-        connections.broadcast("", new LoadGameMessage(gameData));
-        connections.broadcast(userName, new NotificationMessage(""));
+        connections.broadcast("", makeMoveCommand.getGameID(), new LoadGameMessage(gameData.game()));
     }
 
     private void resign(ResignCommand resignCommand, Session session) throws Exception, ResponseException, DataAccessException {
@@ -132,32 +131,51 @@ public class WebSocketHandler {
 
         SQLGameDataDAO gameDataDAO = new SQLGameDataDAO();
         gameDataDAO.updateGame(gameData);
-        connections.broadcast(userName, new NotificationMessage(userName + "has resigned"));
+        connections.broadcast("", resignCommand.getGameID(), new NotificationMessage(userName + " has resigned"));
     }
 
     private void leave(LeaveCommand leaveCommand, Session session) throws DataAccessException, IOException {
         String userName = getUserName(leaveCommand.getAuthToken());
-        ChessGame.TeamColor coor = getTeamColor(userName, leaveCommand.getGameID());
-        connections.remove(userName);
-        connections.broadcast(userName, new NotificationMessage(userName + " has left the game"));
+        ChessGame.TeamColor color = getTeamColor(userName, leaveCommand.getGameID());
+        GameData gameData = getGameData(leaveCommand.getGameID());
+        GameData copy;
+        if (color == ChessGame.TeamColor.WHITE) {
+            copy = new GameData(null, gameData.blackUsername(), gameData);
+        } else if (color == ChessGame.TeamColor.BLACK) {
+            copy = new GameData(gameData.blackUsername(), null, gameData);
+        } else {
+            copy = gameData;
+        }
+        SQLGameDataDAO gameDataDAO = new SQLGameDataDAO();
+        gameDataDAO.updateGame(copy);
+        connections.remove(userName, leaveCommand.getGameID());
+        connections.broadcast(userName, leaveCommand.getGameID(), new NotificationMessage(userName + " has left the game"));
     }
 
     private void loadGame(LoadGameCommand loadGameCommand, Session session) throws DataAccessException, IOException {
         String authToken = loadGameCommand.getAuthToken();
         String userName = getUserName(authToken);
         GameData gameData = getGameData(loadGameCommand.getGameID());
-        connections.send(userName, new LoadGameMessage(gameData));
+        connections.send(userName, loadGameCommand.getGameID(), new LoadGameMessage(gameData.game()));
     }
 
     public String getUserName(String authToken) throws DataAccessException {
         SQLAuthDataDAO authDataDAO = new SQLAuthDataDAO();
         AuthData authData = authDataDAO.getAuth(authToken);
+        if (authData == null) {
+            throw new DataAccessException("Unauthorized");
+        }
         return authData.username();
     }
 
     public GameData getGameData(int gameID) throws DataAccessException {
         SQLGameDataDAO gameDataDAO = new SQLGameDataDAO();
-        return gameDataDAO.getGame(gameID);
+        GameData gameData = gameDataDAO.getGame(gameID);
+        if (gameData == null) {
+            throw new DataAccessException("Invalid Game ID");
+        }
+
+        return gameData;
     }
 
     public ChessGame.TeamColor getTeamColor(String userName, int gameID) throws DataAccessException {

@@ -21,7 +21,7 @@ public class InGameChessClient implements ChessClient {
     ServerFacade serverFacade;
     Class transferClass;
     int gameID;
-    GameData lastGame;
+    ChessGame lastGame;
 
     public InGameChessClient(String url, NotificationHandler notificationHandler) {
         this.url = url;
@@ -148,18 +148,18 @@ public class InGameChessClient implements ChessClient {
             String positionString = params[0];
             ChessPosition position = convertStringToPosition(positionString);
             switch (this.teamColor) {
-                case BLACK -> System.out.println(boardStringBlackHighlight(lastGame.game(), position) + "\n");
-                default -> System.out.println(boardStringWhiteHighlight(lastGame.game(), position) + "\n");
+                case BLACK -> System.out.println(boardStringBlackHighlight(lastGame, position) + "\n");
+                default -> System.out.println(boardStringWhiteHighlight(lastGame, position) + "\n");
             }
         }
         return "";
     }
 
-    public void printBoard(GameData game) {
+    public void printBoard(ChessGame game) {
         lastGame = game;
         switch (this.teamColor) {
-            case BLACK -> System.out.println(boardStringBlack(lastGame.game()) + "\n");
-            default -> System.out.println(boardStringWhite(lastGame.game()) + "\n");
+            case BLACK -> System.out.println(boardStringBlack(lastGame) + "\n");
+            default -> System.out.println(boardStringWhite(lastGame) + "\n");
         }
     }
 
