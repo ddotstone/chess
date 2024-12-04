@@ -29,6 +29,7 @@ public class SignedInChessClient implements ChessClient {
         this.notificationHandler = notificationHandler;
         serverFacade = new ServerFacade(url);
         authToken = null;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
     public SignedInChessClient(SignedOutChessClient copy) {
@@ -36,6 +37,7 @@ public class SignedInChessClient implements ChessClient {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
         this.notificationHandler = copy.notificationHandler;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
     public SignedInChessClient(InGameChessClient copy) {
@@ -43,6 +45,7 @@ public class SignedInChessClient implements ChessClient {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
         this.notificationHandler = copy.notificationHandler;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
     public String getState() {
@@ -113,6 +116,7 @@ public class SignedInChessClient implements ChessClient {
             serverFacade.joinGame(authToken, gameIDInt, teamColorEnum);
             transferClass = InGameChessClient.class;
             this.gameID = gameIDInt;
+            this.teamColor = teamColorEnum;
             ChessBoard board = new ChessBoard();
             board.resetBoard();
             System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
@@ -161,6 +165,7 @@ public class SignedInChessClient implements ChessClient {
             }
             transferClass = InGameChessClient.class;
             this.gameID = gameIDInt;
+            this.teamColor = ChessGame.TeamColor.GREY;
             ChessBoard board = new ChessBoard();
             board.resetBoard();
             System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));

@@ -21,6 +21,7 @@ public class SignedOutChessClient implements ChessClient {
         authToken = null;
         this.url = url;
         this.notificationHandler = notificationHandler;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
     public SignedOutChessClient(SignedInChessClient copy) {
@@ -28,6 +29,7 @@ public class SignedOutChessClient implements ChessClient {
         this.serverFacade = copy.serverFacade;
         this.notificationHandler = copy.notificationHandler;
         this.url = copy.url;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
 
@@ -36,6 +38,7 @@ public class SignedOutChessClient implements ChessClient {
         this.serverFacade = copy.serverFacade;
         this.notificationHandler = copy.notificationHandler;
         this.url = copy.url;
+        this.teamColor = ChessGame.TeamColor.GREY;
     }
 
     public String getState() {
