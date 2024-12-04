@@ -83,7 +83,7 @@ public class WebSocketHandler {
         if (!checkUserColor(turnColor, userName, gameData.gameID())) {
             if (teamColor == ChessGame.TeamColor.GREY) {
                 throw new Exception("You cannot play while observing");
-            } else if (teamColor == ChessGame.TeamColor.NONE) {
+            } else if (tur`nColor == ChessGame.TeamColor.NONE) {
                 throw new Exception("The Game is over");
             } else {
                 throw new Exception("It is currently " + turnColor.toString() + "'s turn");
