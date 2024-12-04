@@ -184,6 +184,7 @@ public class InGameChessClient implements ChessClient {
                 Redraw Board: "draw"
                 Make Move: "move" <start> <end> optional <promotion>
                 Resign: "resign"
+                Highlight: "highlight" <piece>
                 Leave Game: "leave"
                 Quit: "quit"
                 """;
