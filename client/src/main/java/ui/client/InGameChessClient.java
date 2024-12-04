@@ -5,6 +5,7 @@ import connection.ServerFacade;
 import exception.ResponseException;
 import websocketClient.NotificationHandler;
 import websocketClient.WebSocketFacade;
+import model.GameData;
 
 import static ui.DisplayFunctions.*;
 import static ui.EscapeSequences.*;
@@ -20,6 +21,7 @@ public class InGameChessClient implements ChessClient {
     ServerFacade serverFacade;
     Class transferClass;
     int gameID;
+    GameData lastGame;
 
     public InGameChessClient(String url, NotificationHandler notificationHandler) {
         this.url = url;
@@ -37,6 +39,13 @@ public class InGameChessClient implements ChessClient {
         this.notificationHandler = copy.notificationHandler;
         this.gameID = 0;
         this.teamColor = copy.teamColor;
+        try {
+
+            WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+            webSocketFacade.connect(authToken, gameID);
+        } catch (Exception ex) {
+            System.out.println("Unable to connect\n");
+        }
 
     }
 
@@ -47,6 +56,13 @@ public class InGameChessClient implements ChessClient {
         this.notificationHandler = copy.notificationHandler;
         this.gameID = copy.gameID;
         this.teamColor = copy.teamColor;
+        try {
+
+            WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+            webSocketFacade.connect(authToken, gameID);
+        } catch (Exception ex) {
+            System.out.println("Unable to connect\n");
+        }
     }
 
     public String getState() {
@@ -63,6 +79,7 @@ public class InGameChessClient implements ChessClient {
             case "move" -> move(params);
             case "resign" -> resign(params);
             case "leave" -> leave(params);
+            case "highlight" -> highlight(params);
             case "help" -> help();
             case "quit" -> "quit";
             default -> throw new ResponseException(400, "Invalid Command");
@@ -75,8 +92,7 @@ public class InGameChessClient implements ChessClient {
     }
 
     private String draw(String... params) throws ResponseException {
-        WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
-        webSocketFacade.draw(authToken, gameID);
+        printBoard(lastGame);
         return "";
     }
 
@@ -99,6 +115,8 @@ public class InGameChessClient implements ChessClient {
                 }
             }
             ChessMove chessMove = new ChessMove(startPosition, endPosition, promotionPiece);
+            WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+            webSocketFacade.makeMove(authToken, gameID, chessMove);
 
         } else {
             throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
@@ -115,11 +133,20 @@ public class InGameChessClient implements ChessClient {
     public String leave(String... params) throws ResponseException {
         WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
         webSocketFacade.leave(authToken, gameID);
+        transferClass = SignedInChessClient.class;
         return "";
+    }
+
+    public String highlight(String... params) {
 
     }
 
-    public void printBoard(ChessBoard board) {
+    public void printBoard(GameData game) {
+        lastGame = game;
+        switch (this.teamColor) {
+            case BLACK -> System.out.println(boardStringBlack(lastGame.game().getBoard()) + "\n");
+            default -> System.out.println(boardStringWhite(lastGame.game().getBoard()) + "\n");
+        }
     }
 
     @Override
@@ -142,8 +169,10 @@ public class InGameChessClient implements ChessClient {
         if (position.length() != 2) {
             throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
         }
-        int row = position.charAt(0) - 'a' + 1;
-        int col = Character.getNumericValue(position.charAt(1));
+        var colString = position.substring(0, 1);
+        colString.toLowerCase();
+        int col = colString.charAt(0) - 'a' + 1;
+        int row = Character.getNumericValue(position.charAt(1));
         if (row > 8 || col > 8) {
             throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
         }

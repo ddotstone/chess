@@ -1,6 +1,7 @@
 package ui;
 
 import ui.client.ChessClient;
+import ui.client.InGameChessClient;
 import ui.client.SignedOutChessClient;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
@@ -68,7 +69,7 @@ public class Repl implements NotificationHandler {
 
     public void loadGame(LoadGameMessage loadGameMessage) {
         GameData gameData = loadGameMessage.getGameData();
-        SQLAuthDataDAO
-        gameData.blackUsername() ==
+        InGameChessClient inGameChessClient = (InGameChessClient) client;
+        inGameChessClient.printBoard(gameData);
     }
 }

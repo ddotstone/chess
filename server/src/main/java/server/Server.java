@@ -5,10 +5,16 @@ import dataaccess.DataAccessException;
 import dataaccess.NotFoundException;
 import handler.*;
 import spark.*;
+import websocketServer.WebSocketHandler;
 
 import java.util.Map;
 
 public class Server {
+    private WebSocketHandler webSocketHandler;
+
+    public Server() {
+        webSocketHandler = new WebSocketHandler();
+    }
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
@@ -35,6 +41,7 @@ public class Server {
     private void registerHandlers() {
 
         // Session Handlers
+        Spark.webSocket("/ws", new WebSocketHandler());
         Spark.post("/session", (req, res) -> (new SessionHandler()).loginHandler(req, res));
         Spark.delete("/session", (req, res) -> (new SessionHandler()).logoutHandler(req, res));
 

@@ -117,9 +117,6 @@ public class SignedInChessClient implements ChessClient {
             transferClass = InGameChessClient.class;
             this.gameID = gameIDInt;
             this.teamColor = teamColorEnum;
-            ChessBoard board = new ChessBoard();
-            board.resetBoard();
-            System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
             return String.format("joined game %s as %s", gameID, teamColor);
         }
         throw new ResponseException(400, "Expected: join <GAME ID> <TEAM COLOR>");
@@ -163,12 +160,12 @@ public class SignedInChessClient implements ChessClient {
             if (gameIDInt < 0 || gameIDInt >= lastList.size()) {
                 throw new ResponseException(400, "Invalid Game ID");
             }
+            gameIDInt = lastList.get(gameIDInt).gameID();
             transferClass = InGameChessClient.class;
             this.gameID = gameIDInt;
             this.teamColor = ChessGame.TeamColor.GREY;
             ChessBoard board = new ChessBoard();
             board.resetBoard();
-            System.out.println(boardStringBlack(board) + "\n" + SET_BG_COLOR_LIGHT_GREY + "\n" + boardStringWhite(board));
             return String.format("watching game %s", gameID);
         }
         throw new ResponseException(400, "Expected: watch <GAME ID>");

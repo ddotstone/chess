@@ -26,13 +26,14 @@ import websocket.messages.LoadGameMessage;
 import java.io.IOException;
 import java.util.Timer;
 
+@WebSocket
 public class WebSocketHandler {
     private final ConnectionManager connections = new ConnectionManager();
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
         JsonObject object = JsonParser.parseString(message).getAsJsonObject();
-        JsonElement element = object.get("serverMessageType");
+        JsonElement element = object.get("commandType");
         UserGameCommand.CommandType type =
                 UserGameCommand.CommandType.valueOf(element.getAsString());
         try {
@@ -79,6 +80,13 @@ public class WebSocketHandler {
         String userName = getUserName(makeMoveCommand.getAuthToken());
         ChessGame.TeamColor teamColor = getTeamColor(userName, makeMoveCommand.getGameID());
         ChessGame.TeamColor turnColor = gameData.game().getTeamTurn();
+        if (!checkUserColor(turnColor, userName, gameData.gameID())) {
+            if (teamColor == ChessGame.TeamColor.GREY) {
+                throw new Exception("You cannot play while observing");
+            } else {
+                throw new Exception("It is currently " + turnColor.toString() + "'s turn");
+            }
+        }
         gameData.game().makeMove(makeMoveCommand.getMove());
 
         GameDataDAO gameDataDAO = new SQLGameDataDAO();
@@ -104,7 +112,7 @@ public class WebSocketHandler {
 
     private void leave(LeaveCommand leaveCommand, Session session) throws DataAccessException, IOException {
         String userName = getUserName(leaveCommand.getAuthToken());
-        ChessGame.TeamColor color = getTeamColor(userName, leaveCommand.getGameID());
+        ChessGame.TeamColor coor = getTeamColor(userName, leaveCommand.getGameID());
         connections.remove(userName);
         connections.broadcast(userName, new NotificationMessage(userName + " has left the game"));
     }
@@ -137,5 +145,16 @@ public class WebSocketHandler {
             return ChessGame.TeamColor.BLACK;
         }
         return ChessGame.TeamColor.GREY;
+    }
+
+    public boolean checkUserColor(ChessGame.TeamColor turnColor, String userName, int gameID) throws DataAccessException {
+        GameData gameData = getGameData(gameID);
+        boolean ret;
+        switch (turnColor) {
+            case WHITE -> ret = gameData.whiteUsername() != null && gameData.whiteUsername().equals(userName);
+            case BLACK -> ret = gameData.blackUsername() != null && gameData.blackUsername().equals(userName);
+            default -> ret = false;
+        }
+        return ret;
     }
 }
