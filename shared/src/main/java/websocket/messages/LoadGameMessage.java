@@ -11,6 +11,10 @@ public class LoadGameMessage extends ServerMessage {
         this.gameData = gameData;
     }
 
+    public GameData getGameData() {
+        return gameData;
+    }
+
     @Override
     public String toString() {
         return new Gson().toJson(this);

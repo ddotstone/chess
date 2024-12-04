@@ -36,6 +36,7 @@ public class InGameChessClient implements ChessClient {
         this.url = copy.url;
         this.notificationHandler = copy.notificationHandler;
         this.gameID = 0;
+        this.teamColor = copy.teamColor;
 
     }
 
@@ -45,6 +46,7 @@ public class InGameChessClient implements ChessClient {
         this.url = copy.url;
         this.notificationHandler = copy.notificationHandler;
         this.gameID = copy.gameID;
+        this.teamColor = copy.teamColor;
     }
 
     public String getState() {
@@ -85,10 +87,8 @@ public class InGameChessClient implements ChessClient {
             ChessPosition startPosition = convertStringToPosition(start);
             ChessPosition endPosition = convertStringToPosition(end);
             ChessPiece.PieceType promotionPiece = null;
-            if (params.length == 3)
-            {
-                switch(params[2])
-                {
+            if (params.length == 3) {
+                switch (params[2]) {
                     case "pawn" -> promotionPiece = ChessPiece.PieceType.PAWN;
                     case "rook" -> promotionPiece = ChessPiece.PieceType.ROOK;
                     case "king" -> promotionPiece = ChessPiece.PieceType.KING;
@@ -103,8 +103,23 @@ public class InGameChessClient implements ChessClient {
         } else {
             throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
         }
-        transferClass = SignedInChessClient.class;
-        return "exited game";
+        return "";
+    }
+
+    public String resign(String... params) throws ResponseException {
+        WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+        webSocketFacade.resign(authToken, gameID);
+        return "";
+    }
+
+    public String leave(String... params) throws ResponseException {
+        WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
+        webSocketFacade.leave(authToken, gameID);
+        return "";
+
+    }
+
+    public void printBoard(ChessBoard board) {
     }
 
     @Override

@@ -19,6 +19,7 @@ public class SignedInChessClient implements ChessClient {
     String url;
     ServerFacade serverFacade;
     Class transferClass;
+    ChessGame.TeamColor teamColor;
     ArrayList<GameData> lastList;
     NotificationHandler notificationHandler;
     int gameID;

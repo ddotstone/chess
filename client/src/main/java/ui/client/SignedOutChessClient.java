@@ -2,6 +2,7 @@ package ui.client;
 
 import java.util.Arrays;
 
+import chess.ChessGame;
 import websocketClient.NotificationHandler;
 import exception.ResponseException;
 import model.AuthData;
@@ -11,6 +12,7 @@ public class SignedOutChessClient implements ChessClient {
     String authToken;
     String url;
     ServerFacade serverFacade;
+    ChessGame.TeamColor teamColor;
     Class transferClass;
     NotificationHandler notificationHandler;
 

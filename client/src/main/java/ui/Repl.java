@@ -2,6 +2,11 @@ package ui;
 
 import ui.client.ChessClient;
 import ui.client.SignedOutChessClient;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
+import websocketClient.NotificationHandler;
+import model.GameData;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -10,11 +15,11 @@ import java.util.Scanner;
 import static ui.EscapeSequences.*;
 
 
-public class Repl {
+public class Repl implements NotificationHandler {
     private ChessClient client;
 
     public Repl(String serverUrl) {
-        client = new SignedOutChessClient(serverUrl);
+        client = new SignedOutChessClient(serverUrl, this);
     }
 
     public void run() throws InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -51,5 +56,19 @@ public class Repl {
             }
         }
         System.out.println();
+    }
+
+    public void notify(NotificationMessage notificationMessage) {
+        System.out.print(SET_TEXT_COLOR_BLUE + notificationMessage.getMessage() + "\n");
+    }
+
+    public void error(ErrorMessage errorMessage) {
+        System.out.print(SET_TEXT_COLOR_RED + errorMessage.getErrorMessage() + "\n");
+    }
+
+    public void loadGame(LoadGameMessage loadGameMessage) {
+        GameData gameData = loadGameMessage.getGameData();
+        SQLAuthDataDAO
+        gameData.blackUsername() ==
     }
 }

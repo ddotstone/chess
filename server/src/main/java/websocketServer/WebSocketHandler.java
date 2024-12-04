@@ -17,7 +17,6 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import server.Server;
-import websocket.*;
 import websocket.commands.*;
 import websocket.messages.ErrorMessage;
 import websocket.messages.NotificationMessage;
