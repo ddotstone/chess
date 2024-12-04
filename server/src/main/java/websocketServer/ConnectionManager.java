@@ -15,13 +15,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ConnectionManager {
     public final ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
 
-    public void add(String visitorName, Session session) {
-        var connection = new Connection(visitorName, session);
-        connections.put(visitorName, connection);
+    public void add(String userName, Session session) {
+        var connection = new Connection(userName, session);
+        connections.put(userName, connection);
     }
 
-    public void remove(String visitorName) {
-        connections.remove(visitorName);
+    public void remove(String userName) {
+        connections.remove(userName);
     }
 
     public void broadcast(String excludeUserName, ServerMessage message) throws IOException {
@@ -39,6 +39,13 @@ public class ConnectionManager {
         // Clean up any connections that were left open.
         for (var c : removeList) {
             connections.remove(c.userName);
+        }
+    }
+
+    public void send(String userName, ServerMessage message) throws IOException {
+        var conn = connections.get(userName);
+        if (conn.session.isOpen()) {
+            conn.send(message.toString());
         }
     }
 }
