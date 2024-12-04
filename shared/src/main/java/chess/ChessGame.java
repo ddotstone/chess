@@ -59,6 +59,9 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        if (startPosition == null) {
+            return null;
+        }
         ChessPiece currPiece = board.getPiece(startPosition);
         if (currPiece == null) {
             return null;
@@ -93,11 +96,8 @@ public class ChessGame {
         if (currPiece == null) {
             throw new InvalidMoveException("Invalid Starting Space");
         }
-        if (teamTurn == TeamColor.NONE) {
-            throw new InvalidMoveException("The game is over");
-        }
         if (currPiece.getTeamColor() != teamTurn) {
-            throw new InvalidMoveException("It is " + teamTurn.toString() + "'s turn");
+            throw new InvalidMoveException("It is " + teamTurn.toString() + "'s turn, this piece is " + currPiece.getTeamColor().toString());
         }
         Collection<ChessMove> allMoves = validMoves(start);
         boolean legalMove = false;

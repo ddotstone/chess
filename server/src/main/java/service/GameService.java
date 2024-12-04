@@ -51,12 +51,12 @@ public class GameService {
         String whiteUsername = currGame.whiteUsername();
 
         if (joinGameRequest.playerColor() == ChessGame.TeamColor.BLACK) {
-            if (currGame.blackUsername() != null) {
+            if (currGame.blackUsername() != null && !currGame.blackUsername().equals(authData.username())) {
                 throw new AlreadyTakenException();
             }
             blackUsername = authData.username();
         } else if (joinGameRequest.playerColor() == ChessGame.TeamColor.WHITE) {
-            if (currGame.whiteUsername() != null) {
+            if (currGame.whiteUsername() != null && !currGame.whiteUsername().equals(authData.username())) {
                 throw new AlreadyTakenException();
             }
             whiteUsername = authData.username();

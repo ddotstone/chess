@@ -45,14 +45,16 @@ public class DisplayFunctions {
             for (int j = 0; j < colDefines.length; j++) {
                 String backColor = (whiteCol) ? SET_BG_COLOR_WHITE : SET_BG_COLOR_LIGHT_GREY;
                 ChessPiece currPiece = board.getPiece(new ChessPosition(i + 1, j + 1));
-                for (ChessMove move : highlight) {
-                    if (move.equals(new ChessPosition(i + 1, j + 1))) {
-                        switch (backColor) {
-                            case SET_BG_COLOR_WHITE -> backColor = SET_BG_COLOR_GREEN;
-                            default -> backColor = SET_BG_COLOR_DARK_GREEN;
+                if (highlight != null) {
+                    for (ChessMove move : highlight) {
+                        if (move.getEndPosition().equals(new ChessPosition(i + 1, j + 1))) {
+                            switch (backColor) {
+                                case SET_BG_COLOR_WHITE -> backColor = SET_BG_COLOR_GREEN;
+                                default -> backColor = SET_BG_COLOR_DARK_GREEN;
+                            }
+                            break;
                         }
                     }
-                    break;
                 }
 
                 String piece;

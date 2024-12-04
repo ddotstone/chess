@@ -1,6 +1,8 @@
 package websocketServer;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -67,9 +69,9 @@ public class WebSocketHandler {
         ChessGame.TeamColor color = getTeamColor(userName, connectCommand.getGameID());
         String broadcastMessage = userName + "has joined";
         switch (color) {
-            case ChessGame.TeamColor.WHITE -> broadcastMessage = userName + "has joined as white";
-            case ChessGame.TeamColor.BLACK -> broadcastMessage = userName + "has joined as black";
-            case ChessGame.TeamColor.GREY -> broadcastMessage = userName + "has joined as an observer";
+            case ChessGame.TeamColor.WHITE -> broadcastMessage = userName + " has joined as white";
+            case ChessGame.TeamColor.BLACK -> broadcastMessage = userName + " has joined as black";
+            case ChessGame.TeamColor.GREY -> broadcastMessage = userName + " has joined as an observer";
         }
         connections.broadcast(userName, new NotificationMessage(broadcastMessage));
         connections.send(userName, new LoadGameMessage(getGameData(connectCommand.getGameID())));
@@ -83,11 +85,32 @@ public class WebSocketHandler {
         if (!checkUserColor(turnColor, userName, gameData.gameID())) {
             if (teamColor == ChessGame.TeamColor.GREY) {
                 throw new Exception("You cannot play while observing");
+            } else if (teamColor == ChessGame.TeamColor.NONE) {
+                throw new Exception("The Game is over");
             } else {
                 throw new Exception("It is currently " + turnColor.toString() + "'s turn");
             }
         }
+
         gameData.game().makeMove(makeMoveCommand.getMove());
+        connections.broadcast(userName, new NotificationMessage(userName + " has moved " +
+                getPieceAtPosition(gameData.game(), makeMoveCommand.getMove().getEndPosition()) + " from " +
+                convertPositionToString(makeMoveCommand.getMove().getStartPosition()) + " to " +
+                convertPositionToString(makeMoveCommand.getMove().getEndPosition())));
+        if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
+            connections.broadcast("", new NotificationMessage("WHITE is in checkmate, gameover"));
+            gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
+
+        } else if (gameData.game().isInCheck(ChessGame.TeamColor.WHITE)) {
+            connections.broadcast("", new NotificationMessage("WHITE is in check"));
+        } else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
+            connections.broadcast("", new NotificationMessage("BLACK is in checkmate, gameover"));
+            gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
+
+        } else if (gameData.game().isInCheck(ChessGame.TeamColor.BLACK)) {
+            connections.broadcast("", new NotificationMessage("BLACK is in check"));
+        }
+
 
         GameDataDAO gameDataDAO = new SQLGameDataDAO();
         gameDataDAO.updateGame(gameData);
@@ -102,6 +125,8 @@ public class WebSocketHandler {
         ChessGame.TeamColor teamColor = getTeamColor(userName, resignCommand.getGameID());
         if (teamColor == ChessGame.TeamColor.GREY) {
             throw new Exception("Observers cannot resign");
+        } else if (gameData.game().getTeamTurn() == ChessGame.TeamColor.NONE) {
+            throw new Exception("Game Already over");
         }
         gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
 
@@ -137,11 +162,11 @@ public class WebSocketHandler {
 
     public ChessGame.TeamColor getTeamColor(String userName, int gameID) throws DataAccessException {
         GameData gameData = getGameData(gameID);
-        if (gameData.whiteUsername().equals(userName)) {
+        if (gameData.whiteUsername() != null && gameData.whiteUsername().equals(userName)) {
             return ChessGame.TeamColor.WHITE;
         }
 
-        if (gameData.blackUsername().equals(userName)) {
+        if (gameData.blackUsername() != null && gameData.blackUsername().equals(userName)) {
             return ChessGame.TeamColor.BLACK;
         }
         return ChessGame.TeamColor.GREY;
@@ -156,5 +181,17 @@ public class WebSocketHandler {
             default -> ret = false;
         }
         return ret;
+    }
+
+    private String convertPositionToString(ChessPosition position) {
+        if (position.getRow() < 1 || position.getRow() > 8 || position.getColumn() < 1 || position.getColumn() > 8) {
+            throw new IllegalArgumentException("Invalid move");
+        }
+        char column = (char) ('a' + position.getColumn() - 1);
+        return column + String.valueOf(position.getRow());
+    }
+
+    private String getPieceAtPosition(ChessGame game, ChessPosition position) {
+        return game.getBoard().getPiece(position).getPieceType().toString();
     }
 }

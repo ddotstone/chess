@@ -115,6 +115,9 @@ public class InGameChessClient implements ChessClient {
                 }
             }
             ChessMove chessMove = new ChessMove(startPosition, endPosition, promotionPiece);
+            if (teamColor == ChessGame.TeamColor.GREY) {
+                throw new ResponseException(400, "Observers cannot make moves");
+            }
             WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
             webSocketFacade.makeMove(authToken, gameID, chessMove);
 
@@ -125,6 +128,9 @@ public class InGameChessClient implements ChessClient {
     }
 
     public String resign(String... params) throws ResponseException {
+        if (teamColor == ChessGame.TeamColor.GREY) {
+            throw new ResponseException(400, "Observers cannot resign");
+        }
         WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
         webSocketFacade.resign(authToken, gameID);
         return "";
@@ -137,24 +143,23 @@ public class InGameChessClient implements ChessClient {
         return "";
     }
 
-    public String highlight(String... params) throws ResponseException{
-        switch (this.teamColor) {
-            if (params.length == 1)
-            {
-                String positionString = params[0];
-                ChessPosition position = convertStringToPosition(positionString)
+    public String highlight(String... params) throws ResponseException {
+        if (params.length == 1) {
+            String positionString = params[0];
+            ChessPosition position = convertStringToPosition(positionString);
+            switch (this.teamColor) {
                 case BLACK -> System.out.println(boardStringBlackHighlight(lastGame.game(), position) + "\n");
                 default -> System.out.println(boardStringWhiteHighlight(lastGame.game(), position) + "\n");
             }
-
         }
+        return "";
     }
 
     public void printBoard(GameData game) {
         lastGame = game;
         switch (this.teamColor) {
             case BLACK -> System.out.println(boardStringBlack(lastGame.game()) + "\n");
-            default -> System.out.println(boardStringWhite(lastGame) + "\n");
+            default -> System.out.println(boardStringWhite(lastGame.game()) + "\n");
         }
     }
 

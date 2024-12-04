@@ -395,7 +395,7 @@ public class WebSocketTests {
     }
 
     private void assertNotification(String username, TestMessage message) {
-        Assertions.assertEquals(ServerMessage.ServerMessageType.NOTIFICATION, message.getServerMessageType(),
+        Assertions.assertEquals(NOTIFICATION, message.getServerMessageType(),
                 "Message for %s was not a NOTIFICATION message: %s".formatted(username, message));
         Assertions.assertNotNull(message.getMessage(),
                 "%s's NOTIFICATION message did not contain a message (Make sure it's specifically called 'message')".formatted(username));
