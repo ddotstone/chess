@@ -3,6 +3,8 @@ package ui.client;
 import chess.ChessBoard;
 import connection.ServerFacade;
 import exception.ResponseException;
+import websocketClient.NotificationHandler;
+import websocketClient.WebSocketFacade;
 
 import static ui.DisplayFunctions.*;
 import static ui.EscapeSequences.*;
@@ -11,11 +13,15 @@ import java.util.Arrays;
 
 public class InGameChessClient implements ChessClient {
 
+    NotificationHandler notificationHandler;
+    String url;
     String authToken;
     ServerFacade serverFacade;
     Class transferClass;
 
-    public InGameChessClient(String url) {
+    public InGameChessClient(String url, NotificationHandler notificationHandler) {
+        this.url = url;
+        this.notificationHandler = notificationHandler;
         serverFacade = new ServerFacade(url);
         authToken = null;
     }
@@ -26,6 +32,7 @@ public class InGameChessClient implements ChessClient {
     }
 
     public InGameChessClient(SignedInChessClient copy) {
+
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
     }

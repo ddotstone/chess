@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import websocketClient.NotificationHandler;
 import chess.ChessBoard;
 import chess.ChessGame;
 import exception.ResponseException;
@@ -15,23 +16,31 @@ import static ui.EscapeSequences.SET_BG_COLOR_LIGHT_GREY;
 
 public class SignedInChessClient implements ChessClient {
     String authToken;
+    String url;
     ServerFacade serverFacade;
     Class transferClass;
     ArrayList<GameData> lastList;
+    NotificationHandler notificationHandler;
 
-    public SignedInChessClient(String url) {
+    public SignedInChessClient(String url, NotificationHandler notificationHandler) {
+        this.url = url;
+        this.notificationHandler = notificationHandler;
         serverFacade = new ServerFacade(url);
         authToken = null;
     }
 
     public SignedInChessClient(SignedOutChessClient copy) {
+        this.url = copy.url;
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.notificationHandler = copy.notificationHandler;
     }
 
     public SignedInChessClient(InGameChessClient copy) {
+        this.url = copy.url;
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.notificationHandler = copy.notificationHandler;
     }
 
     public String getState() {

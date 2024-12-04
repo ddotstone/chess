@@ -2,29 +2,38 @@ package ui.client;
 
 import java.util.Arrays;
 
+import websocketClient.NotificationHandler;
 import exception.ResponseException;
 import model.AuthData;
 import connection.ServerFacade;
 
 public class SignedOutChessClient implements ChessClient {
     String authToken;
+    String url;
     ServerFacade serverFacade;
     Class transferClass;
+    NotificationHandler notificationHandler;
 
-    public SignedOutChessClient(String url) {
+    public SignedOutChessClient(String url, NotificationHandler notificationHandler) {
         serverFacade = new ServerFacade(url);
         authToken = null;
+        this.url = url;
+        this.notificationHandler = notificationHandler;
     }
 
     public SignedOutChessClient(SignedInChessClient copy) {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.notificationHandler = copy.notificationHandler;
+        this.url = copy.url;
     }
 
 
     public SignedOutChessClient(InGameChessClient copy) {
         this.authToken = copy.authToken;
         this.serverFacade = copy.serverFacade;
+        this.notificationHandler = copy.notificationHandler;
+        this.url = copy.url;
     }
 
     public String getState() {
