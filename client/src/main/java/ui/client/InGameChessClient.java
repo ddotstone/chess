@@ -1,7 +1,6 @@
 package ui.client;
 
-import chess.ChessBoard;
-import chess.ChessGame;
+import chess.*;
 import connection.ServerFacade;
 import exception.ResponseException;
 import websocketClient.NotificationHandler;
@@ -75,11 +74,35 @@ public class InGameChessClient implements ChessClient {
 
     private String draw(String... params) throws ResponseException {
         WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
-        webSocketFacade.draw(authToken, );
+        webSocketFacade.draw(authToken, gameID);
         return "";
     }
 
-    private String exitGame(String... params) throws ResponseException {
+    private String move(String... params) throws ResponseException {
+        if (params.length == 2 || params.length == 3) {
+            String start = params[0];
+            String end = params[1];
+            ChessPosition startPosition = convertStringToPosition(start);
+            ChessPosition endPosition = convertStringToPosition(end);
+            ChessPiece.PieceType promotionPiece = null;
+            if (params.length == 3)
+            {
+                switch(params[2])
+                {
+                    case "pawn" -> promotionPiece = ChessPiece.PieceType.PAWN;
+                    case "rook" -> promotionPiece = ChessPiece.PieceType.ROOK;
+                    case "king" -> promotionPiece = ChessPiece.PieceType.KING;
+                    case "queen" -> promotionPiece = ChessPiece.PieceType.QUEEN;
+                    case "knight" -> promotionPiece = ChessPiece.PieceType.KNIGHT;
+                    case "bishop" -> promotionPiece = ChessPiece.PieceType.BISHOP;
+                    default -> throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
+                }
+            }
+            ChessMove chessMove = new ChessMove(startPosition, endPosition, promotionPiece);
+
+        } else {
+            throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
+        }
         transferClass = SignedInChessClient.class;
         return "exited game";
     }
@@ -89,7 +112,7 @@ public class InGameChessClient implements ChessClient {
         return """
                 Options:
                 Redraw Board: "draw"
-                Make Move: "move" <START> <END>
+                Make Move: "move" <start> <end> optional <promotion>
                 Resign: "resign"
                 Leave Game: "leave"
                 Quit: "quit"
@@ -98,6 +121,18 @@ public class InGameChessClient implements ChessClient {
 
     public Class transferStates() {
         return transferClass;
+    }
+
+    public ChessPosition convertStringToPosition(String position) throws ResponseException {
+        if (position.length() != 2) {
+            throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
+        }
+        int row = position.charAt(0) - 'a' + 1;
+        int col = Character.getNumericValue(position.charAt(1));
+        if (row > 8 || col > 8) {
+            throw new ResponseException(400, "Expected: move <start> <end> optional <promotion>");
+        }
+        return new ChessPosition(row, col);
     }
 
 }
