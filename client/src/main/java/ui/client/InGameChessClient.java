@@ -11,6 +11,7 @@ import static ui.DisplayFunctions.*;
 import static ui.EscapeSequences.*;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class InGameChessClient implements ChessClient {
 
@@ -130,6 +131,19 @@ public class InGameChessClient implements ChessClient {
     public String resign(String... params) throws ResponseException {
         if (teamColor == ChessGame.TeamColor.GREY) {
             throw new ResponseException(400, "Observers cannot resign");
+        }
+        System.out.println(SET_TEXT_COLOR_RED + "Are you sure you want to resign? (y/n)");
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        if (line.equals("n")) {
+            return "";
+        }
+        while (!line.equals("y")) {
+            System.out.println(SET_TEXT_COLOR_RED + "Are you sure you want to resign? (y/n)");
+            line = scanner.nextLine();
+            if (line.equals("n")) {
+                return "";
+            }
         }
         WebSocketFacade webSocketFacade = new WebSocketFacade(url, notificationHandler);
         webSocketFacade.resign(authToken, gameID);

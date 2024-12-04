@@ -104,9 +104,11 @@ public class WebSocketHandler {
         } else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
             connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("BLACK is in checkmate, gameover"));
             gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
-
         } else if (gameData.game().isInCheck(ChessGame.TeamColor.BLACK)) {
             connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("BLACK is in check"));
+        } else if (gameData.game().isInStalemate(ChessGame.TeamColor.WHITE)) {
+            connections.broadcast("", makeMoveCommand.getGameID(), new NotificationMessage("The game has ended in checkmate, gameover"));
+            gameData.game().setTeamTurn(ChessGame.TeamColor.NONE);
         }
         GameDataDAO gameDataDAO = new SQLGameDataDAO();
         gameDataDAO.updateGame(gameData);
